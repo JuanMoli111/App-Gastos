@@ -1,4 +1,4 @@
-from Inicio import start;
+from componentes.menu import start;
 
 
 if __name__=="__main__":

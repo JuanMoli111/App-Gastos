@@ -1,36 +1,21 @@
 import PySimpleGUI as sg
 
-import agregarGasto
-from funciones import *
+from ventanas.menu import build
+from componentes.agregarGasto import start as AgregarGastoStart
 
 def start():
 
     """
     Lanza la ejecución de la primer ventana
     """
-
     window = loop()
 
     window.close()
 
-
 def loop():
-    """
-    Loop de la ventana de menú inicio que capta los eventos al apretar las opciones
-    """
 
-    #Crea el layout de la ventana, este es una lista de elementos de PysimpleGUI
-    #Agregamos los elementos necesarios para recibir la informacion del gasto desde teclado
-    layout= [[sg.Text("PROGRAMA DE GESTION DE GASTOS", size=(30,1), font=("Sawasdee", 25), justification= 'center')],
-        
-            [sg.Button('Agregar gasto',key = '-agregar-')],
-            [sg.Button('salir')]
 
-            ]   
-            
-
-    window = sg.Window('proyecto').Layout(layout)
-
+    window = build()
 
     while True:
         ##Lee los eventos y los values de la ventana
@@ -49,7 +34,8 @@ def loop():
             
             window.hide()
 
-            agregarGasto.start()
+            #Moverse a la ventana de agregar gastos
+            AgregarGastoStart()
 
             window.un_hide()
             
