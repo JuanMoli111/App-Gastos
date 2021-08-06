@@ -3,6 +3,7 @@ import PySimpleGUI as sg
 from ventanas.menu import build
 from componentes.agregarGasto import start as AgregarGastoStart
 
+from componentes.agregarDatos import start as AgregarDatosStart
 def start():
 
     """
@@ -26,7 +27,7 @@ def loop():
 
 
         ##Cierre de la ventana
-        if event in (sg.WINDOW_CLOSED, "Exit", "-exit-","salir"):
+        if event in (sg.WINDOW_CLOSED, "Exit", "-exit-","Salir"):
             break
 
         #Si el user clickea agregar gasto debe dirigir el programa a la ventana de agregar gastos
@@ -35,10 +36,31 @@ def loop():
             window.hide()
 
             #Moverse a la ventana de agregar gastos
-            AgregarGastoStart()
+            AgregarDatosStart()
 
             window.un_hide()
+
+        #Si el user clickea visualizar gasto debe dirigir el programa a la ventana de visualizar gastos
+        if event == "-visualizar-":
             
+            window.hide()
+
+            #Moverse a la ventana de visualizar gastos
+            #VisualizarGastoStart()
+
+            window.un_hide()
+             
+        #Si el user clickea eliminar gasto debe dirigir el programa a la ventana de eliminar gastos
+        
+        if event == "-eliminar-":
+            
+            window.hide()
+
+            #Moverse a la ventana de eliminar gastos
+            #EliminarGastoStart()
+
+            window.un_hide()       
+                        
             
 
     return window

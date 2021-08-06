@@ -8,10 +8,13 @@ def build():
 
     #Crea el layout de la ventana, este es una lista de elementos de PysimpleGUI
     #Agregamos los elementos necesarios para recibir la informacion del gasto desde teclado
-    layout= [[sg.Text("PROGRAMA DE GESTION DE GASTOS", size=(30,1), font=("Sawasdee", 25), justification= 'center')],
-        
-            [sg.Button('Agregar gasto',key = '-agregar-')],
-            [sg.Button('salir')]
+    layout= [[sg.Text("PROGRAMA DE GESTION DE GASTOS", size=(40,2), font=("Sawasdee", 15), justification= 'center')],
+
+                [sg.Button('Agregar Datos',key = '-agregar-')],
+                [sg.Button('Visualizar los datos',key = '-visualizar-')],
+                [sg.Button('Eliminar datos',key = '-eliminar-')],
+
+                [sg.Button('Salir')]
 
             ]   
             

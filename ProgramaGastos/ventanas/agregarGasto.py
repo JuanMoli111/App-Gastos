@@ -1,12 +1,13 @@
 import PySimpleGUI as sg
 
 
-conv = ['Nico','Diego','Juan']
+#Deberiamos recibir por parametro la lista de convivientes y de tipos de gasto, 
+#Lista por defecto...
+conv = ['Usuario']
+tipos = ['Productos','Servicios']
 
-tipos = ['Leche','Arroz']
 
-
-def build():
+def build(conv = ['Usuario'], tipos = ['Productos','Servicios']):
     """
     build de la ventana para agregar gastos, esta funcion crea el layout
      y lo usa para generar la ventana luego retorna la ventana
@@ -18,18 +19,20 @@ def build():
 
     layout= [[sg.Text('Agregar gasto', size=(30,1), font=("Sawasdee", 25), justification= 'center')],
 
-            [sg.Text('Monto'),sg.Input(key='-monto-')],   
-            [[sg.Text('Dia'),sg.Input(key='-dia-')],[sg.Text('Mes'),sg.Input(key='-mes-')],[sg.Text('Año'),sg.Input(key='-anio-')]],   
-            [sg.Text('Tipo de gasto'),sg.Input(key='-tipo-')],          
+            [sg.Text('Monto'),sg.Input(key='-monto-', pad = (4,4))],   
 
-            [sg.Text('Seleccione el autor de la compra')],
+            [[sg.Text('Dia'),sg.Input(key='-dia-', pad = (4,4))],[sg.Text('Mes'),sg.Input(key='-mes-', pad = (4,4))],[sg.Text('Año'),sg.Input(key='-anio-', pad = (4,4))]],   
 
-            [sg.InputCombo(tipos, size=(20, 2))],      
+            [sg.Text('Seleccione el tipo de la compra')],
+            [sg.InputCombo(tipos, size=(20, 2), key = '-tipo-')],
 
+            [sg.Text('Seleccione quien realizo la compra')],
             [sg.Listbox(conv, size= (20,len(conv)), key = '-autor-', enable_events = True)],
+
+
             [sg.Button('aceptar'),sg.Button('salir')]
 
             ]   
 
 
-    return sg.Window(title = "Hello World", layout = layout, margins = (100,100))
+    return sg.Window(title = "Agregar Gasto", layout = layout, margins = (100,100))

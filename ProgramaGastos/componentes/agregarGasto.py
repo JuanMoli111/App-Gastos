@@ -1,12 +1,13 @@
 import PySimpleGUI as sg
 
 from ventanas.agregarGasto import build
+
 from funciones import *
 
 def start():
 
     """
-    Lanza la ejecución de la primer ventana
+        lanza la ejecucion de la ventana agregarGasto
     """
 
     window = loop()
@@ -34,23 +35,29 @@ def loop():
             #Decodifica los datos del json en una estructura de datos 
             data = decode_json()
 
-            #Gastos sea una lista de diccionarios cada uno representa un gasto
+            #Gastos_json sera una lista de diccionarios, cada uno representa un gasto
             gastos_json = data['gastos']
 
-            print(type(gastos_json))
 
+            #Crea un diccionario gasto para almacenar los datos del gasto, recibido en los elementos de la pantalla
             gasto = {
 
                 'monto' : values['-monto-'],
                 'fecha' : [values['-dia-'],values['-mes-'],values['-anio-']],
-                'tipo'  : values['-tipo-']
                 
+                
+                'tipo'  : values['-tipo-'],
+
+                'comprador': values['-autor-']
+
+
             }
 
+            #Agrega el dicc a la lista de diccionarios 
             gastos_json.append(gasto)
 
-            #monto = values['-monto-']
-
+            
+            #Sobreescribe el json con la nueva lista
             write_json(data)
             
 
