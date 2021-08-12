@@ -43,9 +43,7 @@ def loop():
             gasto = {
 
                 'monto' : values['-monto-'],
-                'fecha' : [values['-dia-'],values['-mes-'],values['-anio-']],
-                
-                
+                'fecha' : [values['-dia-'] + '/' + values['-mes-'] + '/' + values['-anio-']],
                 'tipo'  : values['-tipo-'],
 
                 'comprador': values['-autor-']

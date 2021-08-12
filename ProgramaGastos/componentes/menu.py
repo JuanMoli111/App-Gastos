@@ -3,7 +3,10 @@ import PySimpleGUI as sg
 from ventanas.menu import build
 from componentes.agregarGasto import start as AgregarGastoStart
 
+from componentes.visualizarDatos import start as VisualizarDatosStart
+
 from componentes.agregarDatos import start as AgregarDatosStart
+
 def start():
 
     """
@@ -46,7 +49,7 @@ def loop():
             window.hide()
 
             #Moverse a la ventana de visualizar gastos
-            #VisualizarGastoStart()
+            VisualizarDatosStart()
 
             window.un_hide()
              
