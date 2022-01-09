@@ -1,23 +1,23 @@
 import PySimpleGUI as sg
 
-from ventanas.agregarGasto import build
+from ventanas.agregarDatos.agregarGasto import build
 
 from funciones import *
 
-def start():
+def start(usuarios,tipos):
 
     """
         lanza la ejecucion de la ventana agregarGasto
     """
 
-    window = loop()
+    window = loop(usuarios,tipos)
 
     window.close()
 
 
-def loop():
+def loop(usuarios,tipos):
 
-    window = build()
+    window = build(usuarios,tipos)
 
 
     while True:
@@ -42,12 +42,16 @@ def loop():
             #Crea un diccionario gasto para almacenar los datos del gasto, recibido en los elementos de la pantalla
             gasto = {
 
+
+
                 'monto' : values['-monto-'],
                 'fecha' : [values['-dia-'] + '/' + values['-mes-'] + '/' + values['-anio-']],
                 'tipo'  : values['-tipo-'],
 
-                'comprador': values['-autor-']
+                'comprador': values['-autor-'],
 
+                #el codigo unico de cada gasto asignado como el tamaño actual de la lista de gastos mas uno
+                'codigo': str(len(gastos_json) + 1)
 
             }
 

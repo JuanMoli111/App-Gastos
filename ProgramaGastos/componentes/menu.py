@@ -1,11 +1,15 @@
 import PySimpleGUI as sg
 
+
+import time as t
+
 from ventanas.menu import build
-from componentes.agregarGasto import start as AgregarGastoStart
+
+from componentes.agregarDatos.agregarGasto import start as AgregarGastoStart
 
 from componentes.visualizarDatos import start as VisualizarDatosStart
 
-from componentes.agregarDatos import start as AgregarDatosStart
+from componentes.AgregarDatos import start as AgregarDatosStart
 
 def start():
 

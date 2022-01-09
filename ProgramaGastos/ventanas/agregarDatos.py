@@ -9,13 +9,13 @@ def build():
 
 
     #Crea el layout de la ventana, este es una lista de elementos de PysimpleGUI
-    #Necesitamos tres botones para cada tipo de dato a agregar
+    #Necesitamos tres botones para cada tipo de dato a agregar, 
 
     layout = [
 
         [sg.Button('Agregar gastos', key = '-gasto-')],
         [sg.Button('Agregar tipos de producto', key = '-tipo-')],
-        [sg.Button('Agregar convivientes', key = '-conv-')]
+        [sg.Button('Agregar usuarios', key = '-usuario-')]
 
     ]
 

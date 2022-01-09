@@ -3,11 +3,11 @@ import PySimpleGUI as sg
 
 #Deberiamos recibir por parametro la lista de convivientes y de tipos de gasto, 
 #Lista por defecto...
-conv = ['Usuario']
-tipos = ['Productos','Servicios']
+#conv = ['Usuario']
+#tipos = ['Productos','Servicios']
 
 
-def build(conv = ['Usuario'], tipos = ['Productos','Servicios']):
+def build(usuarios = ['Usuario'], tipos = ['Productos','Seios']):
     """
     build de la ventana para agregar gastos, esta funcion crea el layout
      y lo usa para generar la ventana luego retorna la ventana
@@ -24,10 +24,11 @@ def build(conv = ['Usuario'], tipos = ['Productos','Servicios']):
             [[sg.Text('Dia'),sg.Input(key='-dia-', pad = (4,4))],[sg.Text('Mes'),sg.Input(key='-mes-', pad = (4,4))],[sg.Text('Año'),sg.Input(key='-anio-', pad = (4,4))]],   
 
             [sg.Text('Seleccione el tipo de la compra')],
+            
             [sg.InputCombo(tipos, size=(20, 2), key = '-tipo-')],
 
             [sg.Text('Seleccione quien realizo la compra')],
-            [sg.Listbox(conv, size= (20,len(conv)), key = '-autor-', enable_events = True)],
+            [sg.Listbox(usuarios, size= (20,len(usuarios) if len(usuarios) <= 10 else 10), key = '-autor-', enable_events = True)],
 
 
             [sg.Button('aceptar'),sg.Button('salir')]

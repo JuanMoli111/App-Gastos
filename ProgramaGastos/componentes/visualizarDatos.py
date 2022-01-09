@@ -1,4 +1,5 @@
 from funciones import decode_json
+
 import PySimpleGUI as sg
 
 from ventanas.visualizarDatos import build
