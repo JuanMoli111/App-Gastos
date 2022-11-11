@@ -14,7 +14,7 @@ def build(usuarios):
         [sg.Input(key='-usuario-', pad = (4,4)), sg.Button("Agregar",key = '-agregar-')],
 
         [sg.Text("Usuarios")],
-        [sg.Table(values = usuarios, justification="center",headings = ['user'], auto_size_columns=False, col_widths=[16, 16],row_height=10, pad=(2, 2), key = '-lista_usuarios-')],
+        [sg.Table(values = usuarios, justification="center",headings = ['user'], auto_size_columns=False, col_widths=[16, 16],row_height=100, pad=(2, 2), key = '-lista_usuarios-')],
 
         [sg.Button("None x2")]
 

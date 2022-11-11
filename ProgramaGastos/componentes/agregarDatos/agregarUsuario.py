@@ -4,20 +4,25 @@ from ventanas.agregarDatos.agregarUsuario import build
 
 from funciones import *
 
-def start(usuarios):
+def start():
 
     """
         lanza la ejecucion de la ventana agregarGasto
     """
 
-    window = loop(usuarios)
+    window = loop()
 
     window.close()
 
 
-def loop(usuarios):
+def loop():
+    #Decodifica los datos del json en una estructura de datos 
+    data = decode_json()
 
-    window = build(usuarios)
+    #Usuarios_json sera una lista de diccionarios, cada uno representa un gasto
+    usuarios_json = data['usuarios']
+
+    window = build(usuarios_json)
 
 
     while True:
@@ -30,16 +35,28 @@ def loop(usuarios):
         if event in (sg.WINDOW_CLOSED, "Exit", "-exit-","salir"):
             break
 
+
         if ((event == '-agregar-') and (values['-usuario-'] != '')):
             
-            print(usuarios)
-
-            print(event)
+            
 
 
-            usuarios.append(values['-usuario-'])
+            #Crea un diccionario gasto para almacenar los datos del gasto, recibido en los elementos de la pantalla
+            usuario = {
+                'nombre' : values['-usuario-']
 
-            window['-lista_usuarios-'].update(usuarios)
+                #el codigo unico de cada usuario asignado como el tamaño actual de la lista de usuario mas uno
+                #'codigo': str(len(usuarios_json) + 1)
+            }
+
+            #Agrega el dicc a la lista de diccionarios 
+            usuarios_json.append(usuario)
+
+            
+            #Sobreescribe el json con la nueva lista
+            write_json(data)
+
+            window['-lista_usuarios-'].update(usuarios_json)
 
 
         

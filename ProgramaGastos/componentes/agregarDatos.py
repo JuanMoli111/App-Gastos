@@ -26,8 +26,7 @@ def loop():
     window = build()
 
 
-    usuarios, tipos = ['Usuario'],['Productos','Servicios']
-
+    
     while True:
         ##Lee los eventos y los values de la ventana
         event, values = window.read()
@@ -43,7 +42,7 @@ def loop():
             window.hide()
 
             #Moverse a la ventana de agregar gastos
-            AgregarGastoStart(usuarios,tipos)
+            AgregarGastoStart()
 
             window.un_hide()
         
@@ -53,7 +52,7 @@ def loop():
             window.hide()
 
             #Moverse a la ventana de agregar tipos
-            AgregarTipoStart(tipos)
+            AgregarTipoStart()
 
             window.un_hide()
         
@@ -63,7 +62,7 @@ def loop():
             window.hide()
 
             #Moverse a la ventana de agregar gastos
-            AgregarUsuarioStart(usuarios)
+            AgregarUsuarioStart()
 
             window.un_hide()
 

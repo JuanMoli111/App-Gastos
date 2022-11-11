@@ -7,7 +7,7 @@ import PySimpleGUI as sg
 #tipos = ['Productos','Servicios']
 
 
-def build(usuarios = ['Usuario'], tipos = ['Productos','Seios']):
+def build(usuarios, tipos):
     """
     build de la ventana para agregar gastos, esta funcion crea el layout
      y lo usa para generar la ventana luego retorna la ventana
@@ -20,15 +20,15 @@ def build(usuarios = ['Usuario'], tipos = ['Productos','Seios']):
     layout= [[sg.Text('Agregar gasto', size=(30,1), font=("Sawasdee", 25), justification= 'center')],
 
             [sg.Text('Monto'),sg.Input(key='-monto-', pad = (4,4))],   
-
             [[sg.Text('Dia'),sg.Input(key='-dia-', pad = (4,4))],[sg.Text('Mes'),sg.Input(key='-mes-', pad = (4,4))],[sg.Text('Año'),sg.Input(key='-anio-', pad = (4,4))]],   
+            [[sg.Text('Peso'), sg.Input(key='-peso-', pad = (4,4))]],
 
             [sg.Text('Seleccione el tipo de la compra')],
-            
             [sg.InputCombo(tipos, size=(20, 2), key = '-tipo-')],
 
             [sg.Text('Seleccione quien realizo la compra')],
             [sg.Listbox(usuarios, size= (20,len(usuarios) if len(usuarios) <= 10 else 10), key = '-autor-', enable_events = True)],
+
 
 
             [sg.Button('aceptar'),sg.Button('salir')]
