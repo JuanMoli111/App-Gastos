@@ -43,8 +43,8 @@ def loop():
 
             #Crea un diccionario gasto para almacenar los datos del gasto, recibido en los elementos de la pantalla
             usuario = {
-                'nombre' : values['-usuario-']
-
+                'nombre' : values['-usuario-'],
+                'monto' :  values['-monto-']
                 #el codigo unico de cada usuario asignado como el tamaño actual de la lista de usuario mas uno
                 #'codigo': str(len(usuarios_json) + 1)
             }

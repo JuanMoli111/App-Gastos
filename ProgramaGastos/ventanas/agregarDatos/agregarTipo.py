@@ -2,6 +2,7 @@ import PySimpleGUI as sg
 
 
 
+#Recibimos por parametro la lista de tipos de gasto
 
 def build(tipos):
     """
@@ -10,7 +11,6 @@ def build(tipos):
     """
 
     layout = [
-
 
         [sg.Text("Ingrese un tipo de gasto")],
         [sg.Input(key='-tipo-', pad = (4,4))], [sg.Button("Agregar",key = '-agregar-')],
@@ -23,5 +23,6 @@ def build(tipos):
 
 
     ]
-
-    return sg.Window(title = "Agregar Tipo", layout = layout)
+    
+    ##Retorna un objeto Window que crea pasandole el layout creado
+    return sg.Window(title = "Agregar Tipo", layout = layout, margins = (100,100))

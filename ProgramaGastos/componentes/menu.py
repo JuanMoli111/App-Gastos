@@ -31,7 +31,7 @@ def loop():
 
 
         ##Cierre de la ventana
-        if event in (sg.WINDOW_CLOSED, "Exit", "-exit-","Salir"):
+        if event in (sg.WINDOW_CLOSED, "Exit", "-exit-","salir"):
             break
 
         #Si el user clickea agregar gasto debe dirigir el programa a la ventana de agregar gastos

@@ -34,4 +34,4 @@ def build(lista_gastos,lista_usuarios,lista_tipos):
             ]   
             
 
-    return sg.Window('data science').Layout(layout)
+    return sg.Window(title = "Eliminacion de datos", layout = layout, margins = (100,100))

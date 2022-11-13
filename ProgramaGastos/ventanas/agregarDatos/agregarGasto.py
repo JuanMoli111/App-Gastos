@@ -1,11 +1,7 @@
 import PySimpleGUI as sg
 
 
-#Deberiamos recibir por parametro la lista de convivientes y de tipos de gasto, 
-#Lista por defecto...
-#conv = ['Usuario']
-#tipos = ['Productos','Servicios']
-
+#Recibimos por parametro la lista de usuarios y de tipos de gasto, 
 
 def build(usuarios, tipos):
     """
@@ -19,6 +15,7 @@ def build(usuarios, tipos):
 
     layout= [[sg.Text('Agregar gasto', size=(30,1), font=("Sawasdee", 25), justification= 'center')],
 
+            #INGRESAR DATOS DEL GASTO, RESPECTIVAMENTE MONTO DIA MES AÑO PESO EN KG O ML TIPO DE COMPRA Y USUARIO QUE LA REALIZO
             [sg.Text('Monto'),sg.Input(key='-monto-', pad = (4,4))],   
             [[sg.Text('Dia'),sg.Input(key='-dia-', pad = (4,4))],[sg.Text('Mes'),sg.Input(key='-mes-', pad = (4,4))],[sg.Text('Año'),sg.Input(key='-anio-', pad = (4,4))]],   
             [[sg.Text('Peso'), sg.Input(key='-peso-', pad = (4,4))]],
@@ -30,7 +27,7 @@ def build(usuarios, tipos):
             [sg.Listbox(usuarios, size= (20,len(usuarios) if len(usuarios) <= 10 else 10), key = '-autor-', enable_events = True)],
 
 
-
+            ## Aceptar (agregar gasto y guardar) --- Boton para salir 
             [sg.Button('aceptar'),sg.Button('salir')]
 
             ]   

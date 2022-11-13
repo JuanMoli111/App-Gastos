@@ -4,14 +4,14 @@ import PySimpleGUI as sg
 
 def build(usuarios):
     """
-    build de la ventana para agregar usuario, esta funcion crea el layout
+    build de la ventana para agregar usuarios, esta funcion crea el layout
      y lo usa para generar la ventana luego retorna la ventana
     """
 
     layout = [
 
         [sg.Text("Ingrese un usuario nuevo")],
-        [sg.Input(key='-usuario-', pad = (4,4)), sg.Button("Agregar",key = '-agregar-')],
+        [sg.Input(key='-usuario-', pad = (4,4)), sg.Input(key='-monto-', pad = (4,4)), sg.Button("Agregar",key = '-agregar-')],
 
         [sg.Text("Usuarios")],
         [sg.Table(values = usuarios, justification="center",headings = ['user'], auto_size_columns=False, col_widths=[16, 16],row_height=10, pad=(2, 2), key = '-lista_usuarios-')],
@@ -21,4 +21,4 @@ def build(usuarios):
         
     ]
 
-    return sg.Window(title = "Agregar Gasto", layout = layout, margins = (100,100))
+    return sg.Window(title = "Agregar Usuario", layout = layout, margins = (100,100))

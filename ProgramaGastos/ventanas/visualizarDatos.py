@@ -27,7 +27,7 @@ def build(lista_gastos):
                 [sg.Table(values = data, justification="center", headings=['Monto ', 'Fecha ', 'Tipo ', 'Autor ',''], auto_size_columns=False, col_widths=[16, 16],row_height=18, pad=(2, 2))],
 
                 
-                [sg.Button('Salir')]
+                [sg.Button('Salir', key = 'salir')]
             ]   
             
 
