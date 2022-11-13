@@ -2,7 +2,7 @@ from funciones import decode_json
 
 import PySimpleGUI as sg
 
-from ventanas.visualizarDatos import build
+from ventanas.eliminarDatos import build
 
 
 def start():
@@ -20,8 +20,10 @@ def loop():
     data = decode_json()
 
     lista_gastos = data["gastos"]
+    lista_usuarios = data["usuarios"]
+    lista_tipos = data["tipos"]
 
-    window = build(lista_gastos)
+    window = build(lista_gastos,lista_usuarios,lista_tipos)
 
     while True:
         ##Lee los eventos y los values de la ventana

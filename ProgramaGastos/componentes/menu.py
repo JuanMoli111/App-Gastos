@@ -1,15 +1,12 @@
 import PySimpleGUI as sg
 
-
-import time as t
-
 from ventanas.menu import build
-
-from componentes.agregarDatos.agregarGasto import start as AgregarGastoStart
 
 from componentes.visualizarDatos import start as VisualizarDatosStart
 
 from componentes.AgregarDatos import start as AgregarDatosStart
+
+from componentes.eliminarDatos import start as EliminarDatosStart
 
 def start():
 
@@ -64,7 +61,7 @@ def loop():
             window.hide()
 
             #Moverse a la ventana de eliminar gastos
-            #EliminarGastoStart()
+            EliminarDatosStart()
 
             window.un_hide()       
                         

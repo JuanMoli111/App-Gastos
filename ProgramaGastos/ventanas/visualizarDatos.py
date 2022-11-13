@@ -9,6 +9,7 @@ def build(lista_gastos):
     data = [[lista_gastos[row][keys] for keys in lista_gastos[row].keys()]for row in range(len(lista_gastos))]
 
 
+    #Gasto total
     total = sum([int(lista_gastos[row]['monto']) for row in range(len(lista_gastos))])
     
     #Crea el layout de la ventana, este es una lista de elementos de PysimpleGUI

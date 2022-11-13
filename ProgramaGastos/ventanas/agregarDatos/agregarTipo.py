@@ -18,7 +18,7 @@ def build(tipos):
         [sg.Text("Tipos")],
         [sg.Table(values = tipos, justification="center", headings = ['Tipos'], auto_size_columns=False, col_widths=[32, 32],row_height=15, pad=(5, 5), key = '-lista_tipos-')],
 
-        [sg.Button("NOne")]
+        [sg.Button('aceptar'),sg.Button('salir')]
 
 
 
