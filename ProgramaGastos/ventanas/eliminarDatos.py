@@ -21,13 +21,13 @@ def build(lista_gastos,lista_usuarios,lista_tipos):
                 ##TENEMOS QUE MANDAR A ELIMINAR EL DATO QUE FUE SELECCIONADO DE ALGUNA DE LAS TRES TABLAS, AL MOMENTO DE DAR A ELIMINAR
 
                 #Tabla con todos los gastos 
-                [sg.Table(values = data_gastos, justification="center", headings=['Monto ', 'Fecha ', 'Tipo ', 'Autor ',''], auto_size_columns=False, col_widths=[16, 16],row_height=18, pad=(2, 2))],
+                [sg.Table(values = data_gastos, justification="center", headings=['Monto ', 'Fecha ', 'Peso ', 'Tipo ','Autor'], auto_size_columns=False, col_widths=[20, 20],row_height=18, pad=(2, 2))],
                             
                 #Tabla de users
-                [sg.Table(values = data_usuarios, justification="center", headings=['Monto ', 'Fecha ', 'Tipo ', 'Autor ',''], auto_size_columns=False, col_widths=[16, 16],row_height=18, pad=(2, 2))],
+                [sg.Table(values = data_usuarios, justification="center", headings=['Nombre ', 'Monto '], auto_size_columns=False, col_widths=[16, 16],row_height=18, pad=(4, 4))],
                 
                 #Tabla con los tipos de gastos
-                [sg.Table(values = data_tipos, justification="center", headings=['Monto ', 'Fecha ', 'Tipo ', 'Autor ',''], auto_size_columns=False, col_widths=[16, 16],row_height=18, pad=(2, 2))],
+                [sg.Table(values = data_tipos, justification="center", headings=['Tipo'], auto_size_columns=False, col_widths=[16, 16],row_height=18, pad=(6, 6))],
 
                 
                 [sg.Button('eliminar')], [sg.Button('salir')]

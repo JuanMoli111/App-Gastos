@@ -1,8 +1,9 @@
 import PySimpleGUI as sg
 
+from funciones import *
+
 from ventanas.agregarDatos.agregarUsuario import build
 
-from funciones import *
 
 def start():
 
@@ -56,7 +57,8 @@ def loop():
             #Sobreescribe el json con la nueva lista
             write_json(data)
 
-            window['-lista_usuarios-'].update(usuarios_json)
+            window['-lista_usuarios-'].update([[usuarios_json[row][keys] for keys in usuarios_json[row].keys()]for row in range(len(usuarios_json))]
+)
 
 
         

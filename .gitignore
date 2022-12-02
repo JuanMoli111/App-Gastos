@@ -1,2 +1,4 @@
 gastos.json
+.venv
+bin
 __pycache__
