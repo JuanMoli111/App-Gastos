@@ -11,9 +11,6 @@ def build(lista_gastos,lista_usuarios,lista_tipos):
     data_tipos = [lista_tipos[row] for row in range(len(lista_tipos))]
 
 
-    #Gasto total
-    total = sum([int(lista_gastos[row]['monto']) for row in range(len(lista_gastos))])
-    
     #Crea el layout de la ventana, este es una lista de elementos de PysimpleGUI
     #Agregamos los elementos necesarios para recibir la informacion del gasto desde teclado
     layout= [[sg.Text("ELIMINACION DE DATOS", size=(40,2), font=("Sawasdee", 15), justification= 'center')],
@@ -21,7 +18,7 @@ def build(lista_gastos,lista_usuarios,lista_tipos):
                 ##TENEMOS QUE MANDAR A ELIMINAR EL DATO QUE FUE SELECCIONADO DE ALGUNA DE LAS TRES TABLAS, AL MOMENTO DE DAR A ELIMINAR
 
                 #Tabla con todos los gastos 
-                [sg.Table(values = data_gastos, justification="center", headings=['Monto ', 'Fecha ', 'Peso ', 'Tipo ','Autor'], auto_size_columns=False, col_widths=[20, 20],row_height=18, pad=(2, 2))],
+                [sg.Table(values = data_gastos, justification="center", headings=['Monto ', 'Fecha ', 'Peso ', 'Autor', 'Tipo'], auto_size_columns=False, col_widths=[20, 20],row_height=18, pad=(2, 2))],
                             
                 #Tabla de users
                 [sg.Table(values = data_usuarios, justification="center", headings=['Nombre ', 'Monto '], auto_size_columns=False, col_widths=[16, 16],row_height=18, pad=(4, 4))],

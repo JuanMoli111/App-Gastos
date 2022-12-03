@@ -20,8 +20,9 @@ def loop():
     data = decode_json()
 
     lista_gastos = data["gastos"]
+    lista_usuarios = data["usuarios"]
 
-    window = build(lista_gastos)
+    window = build(lista_gastos, lista_usuarios)
 
     while True:
         ##Lee los eventos y los values de la ventana

@@ -1,12 +1,12 @@
 import PySimpleGUI as sg
 
-from ventanas.AgregarDatos import build
+from ventanas.menuAgregarDatos import build
 
-from componentes.agregarDatos.agregarGasto import start as AgregarGastoStart
+from componentes.AgregarDatos.agregarGasto import start as AgregarGastoStart
 
-from componentes.agregarDatos.agregarTipo import start as AgregarTipoStart
+from componentes.AgregarDatos.agregarTipo import start as AgregarTipoStart
 
-from componentes.agregarDatos.agregarUsuario import start as AgregarUsuarioStart
+from componentes.AgregarDatos.agregarUsuario import start as AgregarUsuarioStart
 
 from funciones import *
 

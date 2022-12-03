@@ -1,4 +1,5 @@
 gastos.json
 .venv
+.vscode
 bin
 __pycache__

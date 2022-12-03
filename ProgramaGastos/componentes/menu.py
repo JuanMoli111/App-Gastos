@@ -4,7 +4,7 @@ from ventanas.menu import build
 
 from componentes.visualizarDatos import start as VisualizarDatosStart
 
-from componentes.AgregarDatos import start as AgregarDatosStart
+from componentes.menuAgregarDatos import start as AgregarDatosStart
 
 from componentes.eliminarDatos import start as EliminarDatosStart
 
@@ -25,10 +25,6 @@ def loop():
     while True:
         ##Lee los eventos y los values de la ventana
         event, values = window.read()
-
-        print(event)
-        print(values)
-
 
         ##Cierre de la ventana
         if event in (sg.WINDOW_CLOSED, "Exit", "-exit-","salir"):

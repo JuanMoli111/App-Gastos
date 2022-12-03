@@ -5,7 +5,6 @@ def build():
     """
     Loop de la ventana de menú inicio que capta los eventos al apretar las opciones
     """
-    sg
 
     #Crea el layout de la ventana, este es una lista de elementos de PysimpleGUI
     #Agregamos los elementos necesarios para recibir la informacion del gasto desde teclado

@@ -1,6 +1,6 @@
 import PySimpleGUI as sg
 
-from ventanas.agregarDatos.agregarTipo import build
+from ventanas.AgregarDatos.agregarTipo import build
 
 
 from funciones import *
@@ -20,8 +20,9 @@ def loop():
     
     #Decodifica los datos del json en una estructura de datos 
     data = decode_json()
-    tipos_json = data['tipos']
-    window = build(tipos_json)
+
+    lista_tipos = data['tipos']
+    window = build(lista_tipos)
 
 
     while True:
@@ -36,20 +37,19 @@ def loop():
         ##Si clickeo agregar y el input no es vacio
         if ((event == '-agregar-') and (values['-tipo-'] != '')):
 
-            #MODULARIZAR URGENTE!
+            #MODULARIZAR
             #Crea un diccionario gasto para almacenar los datos del tipo, recibido en los elementos de la pantalla
-            print(values['-tipo-'])
-            tipo =  values['-tipo-']
+            tipo = values['-tipo-']
             
 
             #Agrega el dicc a la lista de diccionarios 
-            tipos_json.append(tipo)
+            lista_tipos.append(tipo)
 
             
             #Sobreescribe el json con la nueva lista
             write_json(data)
 
-            window['-lista_tipos-'].update(tipos_json)
+            window['-lista_tipos-'].update(lista_tipos)
 
 
 
