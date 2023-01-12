@@ -16,7 +16,7 @@ def start():
 
 def loop():
 
-    #Decodifica el json para recuperar la informacion
+    #Decodifica el json para recuperar la informacion (Si decodifico el JSON en el loop event, y lo envia a la ventana, sería esta la forma de actualziar la informacion mientras se introduce?)
     data = decode_json()
 
     lista_gastos = data["gastos"]

@@ -41,10 +41,8 @@ def loop():
             #Crea un diccionario gasto para almacenar los datos del tipo, recibido en los elementos de la pantalla
             tipo = values['-tipo-']
             
-
             #Agrega el dicc a la lista de diccionarios 
             lista_tipos.append(tipo)
-
             
             #Sobreescribe el json con la nueva lista
             write_json(data)

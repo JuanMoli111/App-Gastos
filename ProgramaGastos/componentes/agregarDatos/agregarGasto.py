@@ -23,11 +23,13 @@ def loop():
     #Pasarle los users y los tipos al window BUILD
     lista_usuarios = data['usuarios']
     lista_tipos = data['tipos']
+    
+    
+    lista_productos = []
+
 
     window = build(lista_usuarios, lista_tipos, lista_productos)
 
-    
-    lista_productos = []
 
     while True:
         ##Lee los eventos y los values de la ventana
@@ -37,6 +39,9 @@ def loop():
         ##Cierre de la ventana
         if event in (sg.WINDOW_CLOSED, "Exit", "-exit-","salir"):
             break
+
+        if event == "test":
+            print(values['-date-'])
 
         if event == "-agregar_producto-":
 
@@ -58,14 +63,16 @@ def loop():
 
             gastos_json = data['gastos']
 
+
+
             ##Calcula el monto total con la lista de productos
-            monto_total = sum(map(lambda prod : int(prod["monto"]),lista_productos))
+            monto_total = sum(map(lambda prod : float(prod["monto"]),lista_productos))
            
             #Crea un diccionario gasto para almacenar los datos del gasto, recibido en los elementos de la pantalla
             gasto = {
                 ##monto deberia ser la suma de los montos en la lista de productos
                 'monto_total' : monto_total,
-                'fecha' : [values['-dia-'] + '/' + values['-mes-'] + '/' + values['-anio-']],
+                'fecha' : values['-date-'],
                 'lista_productos': lista_productos,
                 'comprador': values['-autor-'][0],
 
@@ -83,14 +90,16 @@ def loop():
 
             #ACTUALIZAR EL MONTO DEL USUARIO QUE COMPRO
             for i in range(len(lista_usuarios)):
-                print(f"user en {i}" + str(lista_usuarios[i]))
+
+                ##Si encuentra el user con el nombre que realizó el gasto
                 if(lista_usuarios[i]['nombre'] == gasto['comprador']):
-                    print(f"user en {i} monto" + str(lista_usuarios[i]['monto']))
 
+                    ##Resta al monto el total del gasto 
                     lista_usuarios[i]['monto'] = float(lista_usuarios[i]['monto']) - monto_total
-
                     break
             
+
+            ##Actualiza el usuario
             data['usuarios'] = lista_usuarios
 
             #Sobreescribe el json con la nueva lista

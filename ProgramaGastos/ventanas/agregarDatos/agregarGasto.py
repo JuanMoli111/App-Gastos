@@ -18,8 +18,10 @@ def build(lista_usuarios, lista_tipos, lista_productos):
     layout= [[sg.Text('Agregar gasto', size=(30,1), font=("Sawasdee", 25), justification= 'center')],
 
             #INGRESAR DATOS DEL GASTO, RESPECTIVAMENTE MONTO DIA MES AÑO PESO EN KG O ML TIPO DE COMPRA Y USUARIO QUE LA REALIZO
-            [[sg.Text('Dia'),sg.Input(key='-dia-', pad = (4,4))],[sg.Text('Mes'),sg.Input(key='-mes-', pad = (4,4))],[sg.Text('Año'),sg.Input(key='-anio-', pad = (4,4))]],   
-
+            
+            #Elemento calendario, Seteamos las abreviaciones y los nombres de los meses en ESPAÑOL
+            [sg.CalendarButton(button_text='Seleccionar fecha', size=(20, 1), key='-date-',format="%d-%m-%Y" ,day_abbreviations=["DO","LU","MA","MI","JU","VI","SA"],month_names=["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre",])],
+            
             #AGREGAR PRODUCTOS A LA LISTA DE PRODUCTOS DEL GASTO
             [sg.Text('Seleccione el tipo de la compra')],
             [sg.InputCombo(lista_tipos, size=(20, len(lista_tipos) if len(lista_tipos) <= 10 else 10), key = '-tipo-')],
@@ -31,12 +33,11 @@ def build(lista_usuarios, lista_tipos, lista_productos):
 
             [sg.Text('Seleccione quien realizo la compra')],
             [sg.Listbox(lista_usuarios, size= (20,len(lista_usuarios) if len(lista_usuarios) <= 10 else 10), key = '-autor-', enable_events = True)],
-
+            
 
             ## Aceptar (agregar gasto y guardar) --- Boton para salir 
-            [sg.Button('aceptar'),sg.Button('salir')]
-
-            ]   
-
+            [sg.Button('aceptar'),sg.Button('salir'),sg.Button('test')]
+            
+            ]
 
     return sg.Window(title = "Agregar Gasto", layout = layout, margins = (100,100))

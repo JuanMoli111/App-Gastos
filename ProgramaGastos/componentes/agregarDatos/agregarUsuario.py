@@ -56,6 +56,7 @@ def loop():
             #Sobreescribe el json con la nueva lista
             write_json(data)
 
+            #Podria hacer el update en todo momento pero lo hago luego de clickear el boton agregar
             window['-lista_usuarios-'].update([[lista_usuarios[row][keys] for keys in lista_usuarios[row].keys()]for row in range(len(lista_usuarios))]
 )
 

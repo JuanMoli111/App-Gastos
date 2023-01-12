@@ -21,7 +21,6 @@ def build(lista_tipos):
         [sg.Button('aceptar'),sg.Button('salir')]
 
 
-
     ]
     
     ##Retorna un objeto Window que crea pasandole el layout creado

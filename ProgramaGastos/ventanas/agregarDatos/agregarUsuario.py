@@ -15,10 +15,13 @@ def build(lista_usuarios):
     layout = [
 
         [sg.Text("Ingrese un usuario nuevo")],
-        [sg.Input(key='-usuario-', pad = (4,4)), sg.Input(key='-monto-', pad = (4,4)), sg.Button("Agregar",key = '-agregar-')],
+        [sg.Text("Nombre: ") , sg.Input(key='-usuario-', pad = (4,4))],
+        [sg.Text("Monto: ") , sg.Input(key='-monto-', pad = (4,4)) ],
+        [sg.Button("Agregar",key = '-agregar-')],
 
+        
         [sg.Text("Usuarios")],
-        [sg.Table(values = data_usuarios, justification="center",headings = ['Nombre','Monto'], auto_size_columns=False, col_widths=[16, 16],row_height=10, pad=(2, 4), key = '-lista_usuarios-')],
+        [sg.Table(values = data_usuarios, justification="center",headings = ['Nombre','Monto'], auto_size_columns=False, col_widths=[16, 16],  row_height=18, pad=(4, 4), key = '-lista_usuarios-')], 
 
         [sg.Button('aceptar'),sg.Button('salir')]
 
