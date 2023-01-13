@@ -1,7 +1,5 @@
 import PySimpleGUI as sg
 
-from ventanas.menu import build
-
 from componentes.visualizarDatos import start as VisualizarDatosStart
 
 from componentes.menuAgregarDatos import start as AgregarDatosStart
@@ -64,3 +62,49 @@ def loop():
             
 
     return window
+
+
+##BUILD DE LA VENTANA
+
+def build():
+
+    col = [[sg.Button('Salir', key = 'salir',  button_color=('#4287f5'))]]
+
+    layout = [
+        
+        
+                [sg.Text("PROGRAMA DE GESTION DE GASTOS", size=(40,4), font=("Sawasdee", 15), justification= 'center', background_color='#4287f5', text_color='white')],
+
+                [sg.Button('Agregar Datos',key = '-agregar-', button_color=('#4287f5')),
+                sg.Button('Visualizar los datos',key = '-visualizar-', button_color=( '#4287f5')),
+                sg.Button('Eliminar datos',key = '-eliminar-', button_color=( '#4287f5'))],
+
+                
+                [sg.Column(col,justification='right')]
+                
+            ]   
+            
+    return sg.Window('Menu principal', layout)
+    #window = sg.Window('Menu principal')
+    #window.Layout(layout)
+    #return window
+"""
+def build():
+    ""
+    Loop de la ventana de menú inicio que capta los eventos al apretar las opciones
+    ""
+
+    #Crea el layout de la ventana, este es una lista de elementos de PysimpleGUI
+    #Agregamos los elementos necesarios para recibir la informacion del gasto desde teclado
+    layout= [[sg.Text("PROGRAMA DE GESTION DE GASTOS", size=(40,4), font=("Sawasdee", 15), justification= 'center')],
+
+                [sg.Button('Agregar Datos',key = '-agregar-')],
+                [sg.Button('Visualizar los datos',key = '-visualizar-')],
+                [sg.Button('Eliminar datos',key = '-eliminar-')],
+
+                [sg.Button('Salir', key = 'salir')]
+                
+            ]   
+            
+    
+    return sg.Window('Menu principal').Layout(layout)"""
