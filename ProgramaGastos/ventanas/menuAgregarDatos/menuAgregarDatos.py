@@ -1,11 +1,11 @@
 import PySimpleGUI as sg
 
 
-from componentes.AgregarDatos.agregarGasto import start as AgregarGastoStart
+from ventanas.menuAgregarDatos.AgregarDatos.agregarGasto import start as AgregarGastoStart
 
-from componentes.AgregarDatos.agregarTipo import start as AgregarTipoStart
+from ventanas.menuAgregarDatos.AgregarDatos.agregarTipo import start as AgregarTipoStart
 
-from componentes.AgregarDatos.agregarUsuario import start as AgregarUsuarioStart
+from ventanas.menuAgregarDatos.AgregarDatos.agregarUsuario import start as AgregarUsuarioStart
 
 
 from funciones import *
@@ -78,7 +78,6 @@ def build():
      y lo usa para generar la ventana luego retorna la ventana
     """
 
-
     #Crea el layout de la ventana, este es una lista de elementos de PysimpleGUI
     #Necesitamos tres botones para cada tipo de dato a agregar, 
 
@@ -95,4 +94,4 @@ def build():
     ]
 
     ##Retorna un objeto Window que crea pasandole el layout creado
-    return sg.Window(title = "Menu - Agregar datos", layout = layout, margins = (100,100))
+    return sg.Window(title = "Menu - Agregar datos", layout = layout, margins = (100,100), element_padding=(15,15), border_depth=8,resizable=True,auto_size_buttons=True,auto_size_text=True, element_justification='center', no_titlebar=True,disable_close=False, disable_minimize=False, alpha_channel=1, grab_anywhere=True)

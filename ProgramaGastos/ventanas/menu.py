@@ -1,10 +1,13 @@
 import PySimpleGUI as sg
 
-from componentes.visualizarDatos import start as VisualizarDatosStart
+from ventanas.visualizarDatos.visualizarDatos import start as VisualizarDatosStart
 
-from componentes.menuAgregarDatos import start as AgregarDatosStart
+from ventanas.menuAgregarDatos.menuAgregarDatos import start as AgregarDatosStart
 
-from componentes.eliminarDatos import start as EliminarDatosStart
+from ventanas.eliminarDatos.eliminarDatos import start as EliminarDatosStart
+
+
+sg.theme('Purple')
 
 def start():
 
@@ -30,7 +33,7 @@ def loop():
 
         #Si el user clickea agregar gasto debe dirigir el programa a la ventana de agregar gastos
         if event == "-agregar-":
-            
+
             window.hide()
 
             #Moverse a la ventana de agregar gastos
@@ -68,20 +71,19 @@ def loop():
 
 def build():
 
-    col = [[sg.Button('Salir', key = 'salir',  button_color=('#4287f5'))]]
 
     layout = [
         
         
-                [sg.Text("PROGRAMA DE GESTION DE GASTOS", size=(40,4), font=("Sawasdee", 15), justification= 'center', background_color='#4287f5', text_color='white')],
+                [sg.Text("PROGRAMA DE GESTION DE GASTOS" , font=("Sawasdee", 15), justification= 'center', text_color='blue')],
 
-                [sg.Button('Agregar Datos',key = '-agregar-', button_color=('#4287f5')),
-                sg.Button('Visualizar los datos',key = '-visualizar-', button_color=( '#4287f5')),
-                sg.Button('Eliminar datos',key = '-eliminar-', button_color=( '#4287f5'))],
+                [sg.Button('Agregar Datos',key = '-agregar-', size=(16,2), pad=(10,10)),
+                sg.Button('Visualizar los datos',key = '-visualizar-', size=(16,2), pad=(20,20)),
+                sg.Button('Eliminar datos',key = '-eliminar-', size=(16,2), pad=(10,10))],
 
                 
-                [sg.Column(col,justification='right')]
+                [sg.Button('Salir', key = 'salir')]
                 
-            ]   
+            ]
             
-    return sg.Window('Menu principal', layout)
+    return sg.Window('Menu principal', layout, size=(500,400),resizable=True,auto_size_buttons=True,auto_size_text=True, element_padding=(50,60), element_justification='center', no_titlebar=True,disable_close=False, disable_minimize=False, alpha_channel=1, grab_anywhere=True)

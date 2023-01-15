@@ -67,6 +67,7 @@ def build(lista_gastos, lista_usuarios):
                 [sg.Table(values = data_gastos, justification="center", headings=['Monto ', 'Fecha ','Autor'], auto_size_columns=False, col_widths=[16, 16],row_height=18, pad=(2, 2))],
                             
 
+
                 #Mostrar el total que tiene 
                 [sg.Text(total)],[sg.Text(monto)],
 
@@ -80,4 +81,4 @@ def build(lista_gastos, lista_usuarios):
             ]   
             
 
-    return sg.Window('Visualizacion de datos').Layout(layout)
+    return sg.Window(title = "Visualizacion de gastos",layout = layout,  margins=(100,100), element_padding=(20,20), element_justification='center', no_titlebar=True, grab_anywhere=True)

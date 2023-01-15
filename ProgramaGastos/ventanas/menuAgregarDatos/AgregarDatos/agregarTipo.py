@@ -78,4 +78,4 @@ def build(lista_tipos):
     
     
     ##Retorna un objeto Window que crea pasandole el layout creado
-    return sg.Window(title = "Agregar Tipo", layout = layout, margins = (100,100))
+    return sg.Window(title = "Agregar Tipo", layout = layout, margins = (100,100),resizable=True,auto_size_buttons=True,auto_size_text=True, element_justification='center', no_titlebar=True,disable_close=False, disable_minimize=False, alpha_channel=1, grab_anywhere=True)

@@ -78,9 +78,9 @@ def build(lista_usuarios):
     layout = [
 
         [sg.Text("Ingrese un usuario nuevo")],
-        [sg.Text("Nombre: ") , sg.Input(key='-usuario-', pad = (4,4))],
-        [sg.Text("Monto: ") , sg.Input(key='-monto-', pad = (4,4)) ],
-        [sg.Button("Agregar",key = '-agregar-')],
+        [sg.Push(), sg.Text("Nombre: ") , sg.Input(key='-usuario-', pad = (4,4))],
+        [sg.Push(), sg.Text("Monto: ") , sg.Input(key='-monto-', pad = (4,4)) ],
+        [ sg.Button("Agregar",key = '-agregar-')],
 
         
         [sg.Text("Usuarios")],
@@ -91,4 +91,4 @@ def build(lista_usuarios):
         
     ]
 
-    return sg.Window(title = "Agregar Usuario", layout = layout, margins = (100,100))
+    return sg.Window(title = "Agregar Usuario", layout = layout, margins = (100,100),resizable=True,auto_size_buttons=True,auto_size_text=True, element_justification='center', no_titlebar=True,disable_close=False, disable_minimize=False, alpha_channel=1, grab_anywhere=True)

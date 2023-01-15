@@ -70,4 +70,4 @@ def build(lista_gastos,lista_usuarios,lista_tipos):
             ]   
             
 
-    return sg.Window(title = "Eliminacion de datos", layout = layout, margins = (100,100))
+    return sg.Window(title = "Visualizacion de gastos", layout = layout, element_padding=(20,20), margins = (100,100),resizable=True,auto_size_buttons=True,auto_size_text=True, element_justification='center', no_titlebar=True,disable_close=False, disable_minimize=False, alpha_channel=1, grab_anywhere=True)
