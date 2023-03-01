@@ -13,6 +13,7 @@ def start():
     window.close()
 
 
+
 def loop():
 
     ##Decodificar data, necesito los users y los tipos
@@ -24,6 +25,7 @@ def loop():
     lista_gastos = data['gastos']
     
     lista_productos = []
+
 
 
     window = build(lista_usuarios, lista_tipos, lista_productos)
@@ -39,9 +41,23 @@ def loop():
             break
 
         if event == "test":
-
-            testIt(lista_gastos)
+            print(values['-date-'])
+            #testIt(lista_gastos)
+                    
+        if event == "-disable_gastos-":
             
+            #DONE
+            print(window['-tipo_gasto-'].update(disabled=False))
+
+            print(values['-tipo_gasto-'])
+
+            #window['-tipo_gastos-'].update(values['-disable_gastos-'])
+            window['-tipo_gasto-'].update(disabled=values['-disable_gastos-'])
+
+
+        if event == "-disable_productos-":
+            disable_productos = not disable_productos
+            window['-disable_productos-'].update(disable_productos)
 
 
         if event == "-agregar_producto-":
@@ -122,7 +138,7 @@ def loop():
 # #los datos del gasto de los productos que añade a la lista de productos del gasto
     
 #Recibimos por parametro la lista de usuarios y de tipos de gasto, 
-def build(lista_usuarios, lista_tipos, lista_productos):
+def build(lista_usuarios, lista_tipos, lista_productos, disable_productos = False):
     """
     build de la ventana para agregar gastos, esta funcion crea el layout de la ventana,
     este es una lista de elementos de PysimpleGUI,
@@ -136,12 +152,21 @@ def build(lista_usuarios, lista_tipos, lista_productos):
             #INGRESAR DATOS DEL GASTO, RESPECTIVAMENTE MONTO DIA MES AÑO PESO EN KG O ML TIPO DE COMPRA Y USUARIO QUE LA REALIZO
             
             #Elemento calendario, Seteamos las abreviaciones y los nombres de los meses en ESPAÑOL
-            [sg.Push(), sg.CalendarButton(button_text='Seleccionar fecha', size=(20, 1), key='-date-',format="%d-%m-%Y" ,day_abbreviations=["DO","LU","MA","MI","JU","VI","SA"],month_names=["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre",])],
+            [sg.Push()],
+            [sg.CalendarButton(button_text='Seleccionar fecha', size=(20, 1), key='-date-',format="%d-%m-%Y" ,day_abbreviations=["DO","LU","MA","MI","JU","VI","SA"],month_names=["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"])],
             
+            [sg.Checkbox('Incluir en el analisis por gasto', key='-disable_gastos-',enable_events=True)],
+            [sg.Text('Tipo de Gasto'), sg.Input(key='-tipo_gasto-')],
+
+
+            [sg.Checkbox('Incluir en el analisis por productos', key='-disable_productos-')],
             #AGREGAR PRODUCTOS A LA LISTA DE PRODUCTOS DEL GASTO
-            [sg.Push(), sg.Text('Producto'), sg.InputCombo(lista_tipos, size=(20, len(lista_tipos) if len(lista_tipos) <= 10 else 10), key = '-tipo-')],
-            [sg.Push(), sg.Text('Monto'),   sg.Input(key='-monto-', pad = (4,4))],   
-            [sg.Push(), sg.Text('Peso'),    sg.Input(key='-peso-', pad = (4,4))],   
+            [sg.Push(), sg.Text('Producto'), sg.InputCombo(lista_tipos, size=(20, len(lista_tipos) if len(lista_tipos) <= 10 else 10), key = '-tipo-', disabled=disable_productos)],
+            [sg.Push(), sg.Text('Monto'),   sg.Input(key='-monto-', disabled=disable_productos)],  
+            
+            [sg.Radio('Peso', 'loss', size=(12, 1)), sg.Radio('Cantidad', 'loss', default=True, size=(12, 1))],
+
+            [sg.Push(), sg.Text('Peso'),    sg.Input(key='-peso-', disabled=disable_productos)],   
             
             ## Aceptar (agregar gasto y guardar) --- Boton para salir 
             [sg.Push(), sg.Button('Agregar producto',key='-agregar_producto-'),sg.Listbox(lista_productos,key='-lista_productos-',size=(20,5))],
