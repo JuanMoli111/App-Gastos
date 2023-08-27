@@ -21,12 +21,13 @@ def loop():
 
     #Pasarle los users y los tipos al window BUILD
     lista_usuarios = data['usuarios']
-    lista_tipos = data['tipos']
-    lista_gastos = data['gastos']
     
+    ###eliminar luego de hacer el test
+    lista_tipos = data['tipos']
+    #lista_gastos = data['gastos']
+
+    #La lista de productos se inicializa vacia
     lista_productos = []
-
-
 
     window = build(lista_usuarios, lista_tipos, lista_productos)
 
@@ -35,92 +36,107 @@ def loop():
         ##Lee los eventos y los values de la ventana
         event, values = window.read()
 
-        
+
         ##Cierre de la ventana
         if event in (sg.WINDOW_CLOSED, "Exit", "-exit-","salir"):
             break
+        
 
-        if event == "test":
-            print(values['-date-'])
-            #testIt(lista_gastos)
-                    
-        if event == "-disable_gastos-":
+        ##Si desactiva el análisis por producto, la ventana debe inhabilitar el ingreso de datos de lista de producots, precios y cantidades.
+        elif event == "-disable_productos-":
+
             
-            #DONE
-            print(window['-tipo_gasto-'].update(disabled=False))
-
-            print(values['-tipo_gasto-'])
-
-            #window['-tipo_gastos-'].update(values['-disable_gastos-'])
-            window['-tipo_gasto-'].update(disabled=values['-disable_gastos-'])
+            #Vaciar los campos llenados que se van a bloquear
+            if(not values['-disable_productos-']):
+                window['-peso-'].update('')
+                window['-lista_productos-'].update('')
 
 
-        if event == "-disable_productos-":
-            disable_productos = not disable_productos
-            window['-disable_productos-'].update(disable_productos)
+            #Update elementos, habilitandolos o deshabilitandolos
+            window['-peso-'].update(            disabled= not values['-disable_productos-'])
+            window['-radio_peso-'].update(      disabled= not values['-disable_productos-'])
+            window['-radio_cantidad-'].update(  disabled= not values['-disable_productos-'])
+            window['-tipo-'].update(            disabled= not values['-disable_productos-'])
+            window['-precio_producto-'].update( disabled= not values['-disable_productos-'])
+            
+            window['-agregar_producto-'].update(disabled= not values['-disable_productos-'])
+            window['-lista_productos-'].update( disabled=not values['-disable_productos-'])
 
 
-        if event == "-agregar_producto-":
+        #Agregar producto a la lista de productos del gasto 
+        elif event == "-agregar_producto-":
 
-            ##analizar el tema del peso / cantidad (El user deberia poder seleccionar si el producto se cuenta en peso o cantidades, por ejemplo frutas o harina se mide en peso, mientras que por ej esponjas o trapos se miden en cantidades) (no estaria mal que el usuario tambien defina si el peso se midio en kilos o litros)
             producto = {
-                'monto' : values['-monto-'],
+                'precio' : values['-precio_producto-'],
                 'peso'  : values['-peso-'],
                 'tipo'  : values['-tipo-'],
             }
 
             lista_productos.append(producto)
 
-            
-
-            #values['-lista_productos-'] = lista_productos
-            values['-monto-'] = 0
+            #Resetear la lista de productos, el precio y el peso
+            window['-precio_producto-'].update('')
+            window['-peso-'].update('')
             window['-lista_productos-'].update(list(map(lambda prod: prod['tipo'], lista_productos)))
 
         #Si el user clickea aceptar deben guardarse los datos del gasto en un archivo
-        if event == "aceptar":
+        elif event == "aceptar":
 
-   
 
-            ##Calcula el monto total con la lista de productos
-            monto_total = sum(map(lambda prod : float(prod["monto"]),lista_productos))
-           
+            
+            #print("TIPO DE MONTO TOTAL LINE106: " + str(type(sum(map(lambda prod : float(prod["precio"]),lista_productos)))))
+
+            autor = values['-autor-'][0]
+
+            #Buscamos al usuario autor de la compra para salvarlo
+            condition = lambda x: x == autor
+            usuario = next((x for x in lista_usuarios if condition(x['nombre'])), None)
+            
+            #Salvamos la lista de gastos del usuario
+            lista_gastos = usuario['gastos']
+
+
+            #FIX: fecha debe setearse por defecto 
+            #FIX: los productos no pueden agregarse vacios o con campos incompletos
+            #FIX: el precio total debe coincidir con el total de los precios por productos si es que se incluyo el analisis por producto. 
+
+            #FIX: en esta funcion, si el analisis por productos está habilitado debe verificar que la suma de los precios de los prod coincida con el gasto total, y si no esta habilitado debe considerar solo el precio del gasto
+
+            #---Los errores en el ingreso de datos pueden informarse con un pop up. Tambien debería informar el ingreso exitoso del gasto
+
+            if(not values['-disable_productos-']):
+                monto_total = float(values['-precio-'].replace(",","."))
+            else:
+                ##Calcula el monto total con la lista de productos
+                monto_total = sum(map(lambda prod : float(prod["precio"].replace(",",".")),lista_productos))
+            
+            print(values['-disable_productos-'])
+
+
             #Crea un diccionario gasto para almacenar los datos del gasto, recibido en los elementos de la pantalla
+            #(Si el gasto debe ser registrado para analisis)
             gasto = {
-                ##monto deberia ser la suma de los montos en la lista de productos
+
                 'monto_total' : monto_total,
+                'tipo_gasto' : values['-tipo_gasto-'],
                 'fecha' : values['-date-'],
-                'lista_productos': lista_productos,
-                'comprador': values['-autor-'][0],
 
                 #el codigo unico de cada gasto asignado como el tamaño actual de la lista de gastos mas uno
                 'codigo': str(len(lista_gastos) + 1)
 
             }
 
-            #Agrega el dicc a la lista de diccionarios 
+            ##Si esta activado el analisis por producto, salvar la lista de productos en el gasto.
+            if (values['-disable_productos-']): gasto['lista_productos'] = lista_productos
+               
+            
+            #Agrega el gasto (dicc) a la lista de gastos (dicc)
             lista_gastos.append(gasto)
-            
-            #Sobreescribe el json con la nueva lista
-                
-            print("comprador fue " + gasto['comprador'])
-
+                            
             #ACTUALIZAR EL MONTO DEL USUARIO QUE COMPRO
-            for i in range(len(lista_usuarios)):
+            usuario['monto'] -= monto_total
 
-                ##Si encuentra el user con el nombre que realizó el gasto
-                if(lista_usuarios[i]['nombre'] == gasto['comprador']):
-
-                    ##Resta al monto el total del gasto 
-                    lista_usuarios[i]['monto'] = float(lista_usuarios[i]['monto']) - monto_total
-                    break
-            
-
-
-            ##Actualiza el usuario
-            data['usuarios'] = lista_usuarios
-
-            #Sobreescribe el json con la nueva lista
+            #Sobreescribe el json con la nueva lista de users
             write_json(data)
 
  
@@ -132,13 +148,12 @@ def loop():
     return window
 
 
-##  -------------------
-##  BUILD DE LA VENTANA
-#NOTA  diseñar mejor la disposicion de los elementos , dividiendo para que sea intuitivo
-# #los datos del gasto de los productos que añade a la lista de productos del gasto
-    
+
+##  -------------------         #NOTA  diseñar mejor la disposicion de los elementos: quiero que la fecha, tipo de gasto, precio y lista de usuarios este justificado a la izquierda
+##  BUILD DE LA VENTANA         ###   todo lo relativo a analisis por producto justificado a la derecha,  Y los botones para agregar gasto y para salir queden debajo
+
 #Recibimos por parametro la lista de usuarios y de tipos de gasto, 
-def build(lista_usuarios, lista_tipos, lista_productos, disable_productos = False):
+def build(lista_usuarios, lista_tipos, lista_productos):
     """
     build de la ventana para agregar gastos, esta funcion crea el layout de la ventana,
     este es una lista de elementos de PysimpleGUI,
@@ -147,43 +162,44 @@ def build(lista_usuarios, lista_tipos, lista_productos, disable_productos = Fals
 
     lista_usuarios = list(map(lambda u: u['nombre'], lista_usuarios))
     
+
     layout= [[sg.Text('Agregar gasto', size=(30,1), font=("Sawasdee", 25), justification= 'center')],
 
-            #INGRESAR DATOS DEL GASTO, RESPECTIVAMENTE MONTO DIA MES AÑO PESO EN KG O ML TIPO DE COMPRA Y USUARIO QUE LA REALIZO
-            
+            #INGRESAR DATOS DEL GASTO, RESPECTIVAMENTE MONTO TOTAL, FECHA, TIPO DE GASTO, USUARIO QUE LO REALIZO ,LISTA DE PRODUCTOS, QUE INCLUYE: PRECIO , PESO O CANTIDAD Y TIPO DE PRODUCTO 
             #Elemento calendario, Seteamos las abreviaciones y los nombres de los meses en ESPAÑOL
-            [sg.Push()],
             [sg.CalendarButton(button_text='Seleccionar fecha', size=(20, 1), key='-date-',format="%d-%m-%Y" ,day_abbreviations=["DO","LU","MA","MI","JU","VI","SA"],month_names=["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"])],
+                        
+            [sg.Text('Tipo de Gasto',justification='left')], 
+            [sg.Input(key='-tipo_gasto-')],
+            [sg.Text('Precio',justification='left')], 
+            [sg.Input(key='-precio-')],
+
+            [sg.Text('Seleccione quien realizo la compra')],
+            [sg.Listbox(lista_usuarios, size= (20,len(lista_usuarios) if len(lista_usuarios) <= 10 else 10), key = '-autor-', enable_events = True)],
             
-            [sg.Checkbox('Incluir en el analisis por gasto', key='-disable_gastos-',enable_events=True)],
-            [sg.Text('Tipo de Gasto'), sg.Input(key='-tipo_gasto-')],
 
+            #Switch para activar o desactivar el análisis por productos.
+            [sg.Push(), sg.Checkbox('Incluir en el analisis por productos', key='-disable_productos-', enable_events=True, default=True)],
 
-            [sg.Checkbox('Incluir en el analisis por productos', key='-disable_productos-')],
             #AGREGAR PRODUCTOS A LA LISTA DE PRODUCTOS DEL GASTO
-            [sg.Push(), sg.Text('Producto'), sg.InputCombo(lista_tipos, size=(20, len(lista_tipos) if len(lista_tipos) <= 10 else 10), key = '-tipo-', disabled=disable_productos)],
-            [sg.Push(), sg.Text('Monto'),   sg.Input(key='-monto-', disabled=disable_productos)],  
-            
-            [sg.Radio('Peso', 'loss', size=(12, 1)), sg.Radio('Cantidad', 'loss', default=True, size=(12, 1))],
+            [sg.Push(), sg.Text('Producto'), sg.InputCombo(lista_tipos, size=(20, len(lista_tipos) if len(lista_tipos) <= 10 else 10), key = '-tipo-')],
 
-            [sg.Push(), sg.Text('Peso'),    sg.Input(key='-peso-', disabled=disable_productos)],   
+            ##El producto se puede medir en cantidades, o en pesos. El peso debería poder medirse en kilos o en litros
+            [[sg.Push(), sg.Radio('Peso', 'loss', size=(10, 1),key='-radio_peso-'), sg.Radio('Cantidad', 'loss', default=True, size=(10, 1),key='-radio_cantidad-')],
             
+            [sg.Push(), sg.Text('Peso'), sg.Input(key='-peso-',size=(30,40))]],   
+            [sg.Push(), sg.Text('Precio') , sg.Input(key='-precio_producto-',size=(30,40))],
+
+            ## Aceptar (agregar producto a la lista) 
+            [sg.Push(), sg.Button('Agregar producto',key='-agregar_producto-'),
+             sg.Listbox(lista_productos,key='-lista_productos-',size=(20,5))],
+
+
             ## Aceptar (agregar gasto y guardar) --- Boton para salir 
-            [sg.Push(), sg.Button('Agregar producto',key='-agregar_producto-'),sg.Listbox(lista_productos,key='-lista_productos-',size=(20,5))],
-
-            [sg.Push(), sg.Text('Seleccione quien realizo la compra')],
-            [sg.Push(), sg.Listbox(lista_usuarios, size= (20,len(lista_usuarios) if len(lista_usuarios) <= 10 else 10), key = '-autor-', enable_events = True)],
-            
-
-            ## Aceptar (agregar gasto y guardar) --- Boton para salir 
-            [sg.Button('aceptar'),sg.Button('salir'),sg.Button('test')]
+            [sg.Button('aceptar'),sg.Button('salir')]
             
             ]
 
     return sg.Window(title = "Agregar Gasto", layout = layout, margins = (100,100),resizable=True,auto_size_buttons=True,auto_size_text=True, element_justification='center', no_titlebar=True,disable_close=False, disable_minimize=False, alpha_channel=1, grab_anywhere=True)
 
 
-
-
-def testIt(lista_gastos):
-    monto = 0

@@ -71,7 +71,6 @@ def loop():
 
 def build():
 
-
     layout = [
         
         

@@ -29,7 +29,6 @@ def loop():
         ##Lee los eventos y los values de la ventana
         event, values = window.read()
 
-
         
         ##Cierre de la ventana
         if event in (sg.WINDOW_CLOSED, "Exit", "-exit-","salir"):
@@ -44,8 +43,6 @@ def loop():
             usuario = {
                 'nombre' : values['-usuario-'],
                 'monto' :  values['-monto-']
-                #el codigo unico de cada usuario asignado como el tamaño actual de la lista de usuario mas uno
-                #'codigo': str(len(lista_usuarios) + 1)
             }
 
             #Agrega el dicc a la lista de diccionarios 

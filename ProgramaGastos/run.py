@@ -24,4 +24,17 @@ if __name__ == "__main__":
         Para cada prod podria tener un swithc para setear por kilos, o por cantidad. por ejemplo un maple de huevo se mide en cantidad en vez de kilos
 
 
+    La idea es empezar a salvar los datos desde agosto como marcados por tipo de gasto
+
+    Luego para las compras de las que tenga datos mas especificos Se incluy en el analisis por producto
+
+    Asi podemos tener x ejemplo dos compras de tipo supermercado
+    pero una sin productos y otra con tres productos
+
+    Asi se puede analizar en general y tambien en particular
+
+    (en ambas podemos hacer analisis por tipos de gasto. aunque para analisis por productos o analisis de datos mas particulares solo contaremos los gastos incluidos en el analisis por productos. esto va a reducir el numero de datos pero vamos a contar con que los que haya son precisos y a la larga será de utilidad igualmente)
+    
+
+
 """
