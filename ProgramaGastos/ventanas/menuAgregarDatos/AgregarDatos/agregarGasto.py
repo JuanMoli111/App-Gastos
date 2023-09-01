@@ -2,6 +2,8 @@ import PySimpleGUI as sg
 
 from funciones import *
 
+from datetime import datetime
+
 def start():
 
     """
@@ -30,7 +32,7 @@ def loop():
     lista_productos = []
 
     window = build(lista_usuarios, lista_tipos, lista_productos)
-
+     
 
     while True:
         ##Lee los eventos y los values de la ventana
@@ -66,83 +68,101 @@ def loop():
         #Agregar producto a la lista de productos del gasto 
         elif event == "-agregar_producto-":
 
-            producto = {
-                'precio' : values['-precio_producto-'],
-                'peso'  : values['-peso-'],
-                'tipo'  : values['-tipo-'],
-            }
+            #Los productos no pueden agregarse vacios o con campos incompletos
+            if(values['-tipo-']) == '':
+                sg.popup("Olvido ingresar el tipo de producto")
+            elif(values['-precio_producto-']) == '':
+                sg.popup("Olvido ingresar el precio del producto")
+            else:
+                producto = {
+                    'precio' : values['-precio_producto-'],
+                    'peso'  : values['-peso-'],
+                    'tipo'  : values['-tipo-']
+                }
 
-            lista_productos.append(producto)
+                lista_productos.append(producto)
 
-            #Resetear la lista de productos, el precio y el peso
-            window['-precio_producto-'].update('')
-            window['-peso-'].update('')
-            window['-lista_productos-'].update(list(map(lambda prod: prod['tipo'], lista_productos)))
+                #Resetear la lista de productos, el precio y el peso
+                window['-precio_producto-'].update('')
+                window['-peso-'].update('')
+                window['-lista_productos-'].update(list(map(lambda prod: prod['tipo'], lista_productos)))
 
         #Si el user clickea aceptar deben guardarse los datos del gasto en un archivo
         elif event == "aceptar":
 
+            cancelar_operaciones = False
 
-            
-            #print("TIPO DE MONTO TOTAL LINE106: " + str(type(sum(map(lambda prod : float(prod["precio"]),lista_productos)))))
+            #Deberia hacer una funcion que haga las comprobaciones
 
-            autor = values['-autor-'][0]
-
-            #Buscamos al usuario autor de la compra para salvarlo
-            condition = lambda x: x == autor
-            usuario = next((x for x in lista_usuarios if condition(x['nombre'])), None)
-            
-            #Salvamos la lista de gastos del usuario
-            lista_gastos = usuario['gastos']
-
-
-            #FIX: fecha debe setearse por defecto 
-            #FIX: los productos no pueden agregarse vacios o con campos incompletos
-            #FIX: el precio total debe coincidir con el total de los precios por productos si es que se incluyo el analisis por producto. 
-
-            #FIX: en esta funcion, si el analisis por productos está habilitado debe verificar que la suma de los precios de los prod coincida con el gasto total, y si no esta habilitado debe considerar solo el precio del gasto
-
-            #---Los errores en el ingreso de datos pueden informarse con un pop up. Tambien debería informar el ingreso exitoso del gasto
-
-            if(not values['-disable_productos-']):
-                monto_total = float(values['-precio-'].replace(",","."))
+            ##Si algun campo está vacio debe mostrar un popup al respecto y no dejar guardar el producto, y no hacer operaciones innecesarias
+            if(values['-tipo_gasto-']) == '':
+                sg.popup("Olvido ingresar el tipo de gasto")
+            elif(values['-precio-']) == '':
+                sg.popup("Olvido ingresar el precio del gasto")
+            elif(values['-autor-'].__len__() == 0):
+                sg.popup("Olvido ingresar el autor del gasto")
             else:
-                ##Calcula el monto total con la lista de productos
-                monto_total = sum(map(lambda prod : float(prod["precio"].replace(",",".")),lista_productos))
-            
-            print(values['-disable_productos-'])
+
+                #Si esta activado el analisis por productos debe verificar que los precios coincidan, si no coinciden debe activar el booleano CANCELAR_OPERACIONES
+                #Si esta desactivado el analisis por productos entonces solo debe setear el monto del precio del gasto
+                if(values['-disable_productos-']):
+                    total_precios_productos = sum(map(lambda prod : float(prod["precio"].replace(",",".")),lista_productos))
+                                            
+                    #Si los precios no coinciden mostrar un popup y cancelar todo el resto de las operaciones
+                    if(total_precios_productos != float(values['-precio-'].replace(",","."))):
+                        sg.popup("Error la suma de los montos de los productos no coinciden con el total del gasto")
+                        cancelar_operaciones = True
+                    else:
+                        monto_total = total_precios_productos
+                else:
+                    monto_total = float(values['-precio-'].replace(",","."))
+
+                if(not(cancelar_operaciones)):
 
 
-            #Crea un diccionario gasto para almacenar los datos del gasto, recibido en los elementos de la pantalla
-            #(Si el gasto debe ser registrado para analisis)
-            gasto = {
+                        autor = values['-autor-'][0]
 
-                'monto_total' : monto_total,
-                'tipo_gasto' : values['-tipo_gasto-'],
-                'fecha' : values['-date-'],
+                        #Buscamos al usuario autor de la compra para salvarlo
+                        condicion = lambda x: x == autor
+                        usuario = next((x for x in lista_usuarios if condicion(x['nombre'])), None)
+                        
+                        #Salvamos la lista de gastos del usuario
+                        lista_gastos = usuario['gastos']
 
-                #el codigo unico de cada gasto asignado como el tamaño actual de la lista de gastos mas uno
-                'codigo': str(len(lista_gastos) + 1)
+                        #Si el usuario olvido poner la fecha pone la fecha del dia, sino deja la que asigno el usuario
+                        fecha = datetime.now().strftime('%d-%m-%Y') if values['-date-'] == '' else values['-date-']
+                        
+                        
+                        #Crea un diccionario gasto para almacenar los datos del gasto, recibido en los elementos de la pantalla
+                        gasto = {
 
-            }
+                            'monto_total' : monto_total,
+                            'tipo_gasto' : values['-tipo_gasto-'],
+                            'fecha' : fecha,
 
-            ##Si esta activado el analisis por producto, salvar la lista de productos en el gasto.
-            if (values['-disable_productos-']): gasto['lista_productos'] = lista_productos
-               
-            
-            #Agrega el gasto (dicc) a la lista de gastos (dicc)
-            lista_gastos.append(gasto)
-                            
-            #ACTUALIZAR EL MONTO DEL USUARIO QUE COMPRO
-            usuario['monto'] -= monto_total
+                            #el codigo unico de cada gasto asignado como el tamaño actual de la lista de gastos mas uno
+                            'codigo': str(len(lista_gastos) + 1)
 
-            #Sobreescribe el json con la nueva lista de users
-            write_json(data)
+                        }
 
- 
-            ##Resetea la lista de productos
-            lista_productos=[]
-            window['-lista_productos-'].update(lista_productos)
+                        ##Si esta activado el analisis por producto, salvar la lista de productos en el gasto.
+                        if (values['-disable_productos-']): gasto['lista_productos'] = lista_productos
+                        
+                        
+                        #Agrega el gasto (dicc) a la lista de gastos (dicc)
+                        lista_gastos.append(gasto)
+                                        
+                        #ACTUALIZAR EL MONTO DEL USUARIO QUE COMPRO
+                        usuario['monto'] -= monto_total
+
+                        #Sobreescribe el json con la nueva lista de users
+                        write_json(data) 
+
+                        sg.popup("El gasto se agrego exitosamente")
+
+                        ##Resetea la lista de productos
+                        lista_productos=[]
+                        window['-lista_productos-'].update(lista_productos)
 
 
     return window
