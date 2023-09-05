@@ -26,7 +26,6 @@ def loop():
     
     ###eliminar luego de hacer el test
     lista_tipos = data['tipos']
-    #lista_gastos = data['gastos']
 
     #La lista de productos se inicializa vacia
     lista_productos = []
@@ -103,7 +102,7 @@ def loop():
                 sg.popup("Olvido ingresar el autor del gasto")
             else:
 
-                #Si esta activado el analisis por productos debe verificar que los precios coincidan, si no coinciden debe activar el booleano CANCELAR_OPERACIONES
+                #Si esta activado el analisis por productos debe verificar que los precios de los productos coincidan con el total del gasto, si no coinciden debe activar el booleano CANCELAR_OPERACIONES
                 #Si esta desactivado el analisis por productos entonces solo debe setear el monto del precio del gasto
                 if(values['-disable_productos-']):
                     total_precios_productos = sum(map(lambda prod : float(prod["precio"].replace(",",".")),lista_productos))
@@ -185,7 +184,6 @@ def build(lista_usuarios, lista_tipos, lista_productos):
 
     layout= [[sg.Text('Agregar gasto', size=(30,1), font=("Sawasdee", 25), justification= 'center')],
 
-            #INGRESAR DATOS DEL GASTO, RESPECTIVAMENTE MONTO TOTAL, FECHA, TIPO DE GASTO, USUARIO QUE LO REALIZO ,LISTA DE PRODUCTOS, QUE INCLUYE: PRECIO , PESO O CANTIDAD Y TIPO DE PRODUCTO 
             #Elemento calendario, Seteamos las abreviaciones y los nombres de los meses en ESPAÑOL
             [sg.CalendarButton(button_text='Seleccionar fecha', size=(20, 1), key='-date-',format="%d-%m-%Y" ,day_abbreviations=["DO","LU","MA","MI","JU","VI","SA"],month_names=["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"])],
                         

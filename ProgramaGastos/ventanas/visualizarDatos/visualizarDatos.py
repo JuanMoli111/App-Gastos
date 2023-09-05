@@ -17,7 +17,9 @@ def loop():
     #Decodifica el json para recuperar la informacion
     data = decode_json()
 
+
     lista_usuarios = data["usuarios"]
+
 
     window = build(lista_usuarios)
 
@@ -25,50 +27,51 @@ def loop():
         ##Lee los eventos y los values de la ventana
         event, values = window.read()
 
+
         ##Cierre de la ventana
         if event in (sg.WINDOW_CLOSED, "Exit", "-exit-","salir"):
             break
 
 
+        if event == '-usuario-':
 
+            #Salvamos el nombre del usuario seleccionado para analisis de datos
+            usuario_seleccionado = values['-usuario-'][0]
+
+            #Buscamos al usuario en la lista epara salvar sus datos
+            usuario = next((x for x in lista_usuarios if x['nombre'] == usuario_seleccionado), None)
+
+            lista_gastos = usuario['gastos']
+
+            #Convierte la lista de gastos, que es una lista de diccionarios-gasto, en una lista de listas-gasto, que es el formato necesario para la tabla
+            lista_formateada = [[lista_gastos[row][keys] for keys in lista_gastos[row].keys()]for row in range(len(lista_gastos))]
+ 
+            #Actualiza la tabla de gastos
+            window['-tabla_gastos-'].update(lista_formateada)
+        
     return window
 
 
 ##BUILD DE LA VENTANA
 
-
 #Recibir del componente una lista de gastos generada decodificando el json que registra los gastos
 #Usar la lista para visualizar los datos en el layout de la ventana
 def build(lista_usuarios):
 
-    #Generar una lista de los gastos, que pueda usarse en la tabla de visualizacion de los datos
-    #data_gastos = [[lista_gastos[row][keys] for keys in lista_gastos[row].keys()]for row in range(len(lista_gastos))]
-    data_usuarios = [[lista_usuarios[row][keys] for keys in lista_usuarios[row].keys()]for row in range(len(lista_usuarios))]
-
-   
-    #monto = sum(map(lambda prod : int(prod["monto_total"]) if int(prod["monto_total"]) > 0 else 0,lista_gastos))
-
-    #Filtramos los INGRESOS para solo sumar los gastos
-    #lista_gastos_sin_ingresos = list(filter(lambda i: (i['monto_total'] > 0),lista_gastos))
-
-    #Gasto total
-    #total = sum([int(lista_gastos_sin_ingresos[row]['monto_total']) for row in range(len(lista_gastos_sin_ingresos))])
+    nombres_usuarios = list(map(lambda usuario: usuario["nombre"], lista_usuarios))
 
 
     #Crea el layout de la ventana, este es una lista de elementos de PysimpleGUI
     #Agregamos los elementos necesarios para recibir la informacion del gasto desde teclado
     layout= [[sg.Text("VISUALIZACION DE GASTOS", size=(40,2), font=("Sawasdee", 15), justification= 'center')],
 
-                #Tabla con todos los gastos 
-                #[sg.Table(values = data_gastos, justification="center", headings=['Monto ', 'Fecha ','Autor'], auto_size_columns=False, col_widths=[16, 16],row_height=18, pad=(2, 2))],
-                            
+                #Selecciona un usuario para visualizar sus gastos
+                [sg.Text("Seleccione el usuario"), sg.Listbox(nombres_usuarios, size=(10, len(nombres_usuarios) if len(nombres_usuarios) <= 5 else 5), key = '-usuario-', enable_events=True)],
 
-                #debe permitir ver datos y gastos por usuario y por otros criterios
+                #Tabla con los gastos
+                [sg.Table(values = [], headings=['Monto Total','Tipo De Gasto','Fecha','Codigo','Lista Productos','Lalalala','Lalalala','Lalalala'],key = '-tabla_gastos-', justification='center', auto_size_columns=False, col_widths=[16, 16],row_height=18, pad=(2, 2))],
 
-                #Tabla con los usuarios
-                [sg.Table(values = data_usuarios, justification="center", headings=['Monto ','Autor'], auto_size_columns=False, col_widths=[16, 16],row_height=18, pad=(2, 2))],
-
-                
+    
                 [sg.Button('Salir', key = 'salir')]
             ]   
             
