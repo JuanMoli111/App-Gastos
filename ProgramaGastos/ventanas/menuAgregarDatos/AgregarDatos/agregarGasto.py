@@ -21,15 +21,13 @@ def loop():
     ##Decodificar data, necesito los users y los tipos
     data = decode_json()
 
-    #Pasarle los users y los tipos al window BUILD
     lista_usuarios = data['usuarios']
-    
-    ###eliminar luego de hacer el test
     lista_tipos = data['tipos']
 
     #La lista de productos se inicializa vacia
     lista_productos = []
 
+    #Pasarle los users y los tipos al window BUILD
     window = build(lista_usuarios, lista_tipos, lista_productos)
      
 
@@ -73,6 +71,13 @@ def loop():
             elif(values['-precio_producto-']) == '':
                 sg.popup("Olvido ingresar el precio del producto")
             else:
+
+
+                window['-monto_total-'].update("{:.2f}".format(float(window['-monto_total-'].get()) + float(values['-precio_producto-'])))
+                
+                #print(f"TEST:  {values['-monto_total-']}  ")
+                print(f"TEST:  {window['-monto_total-'].get()}  ")
+
                 producto = {
                     'precio' : values['-precio_producto-'],
                     'peso'  : values['-peso-'],
@@ -105,8 +110,8 @@ def loop():
                 #Si esta activado el analisis por productos debe verificar que los precios de los productos coincidan con el total del gasto, si no coinciden debe activar el booleano CANCELAR_OPERACIONES
                 #Si esta desactivado el analisis por productos entonces solo debe setear el monto del precio del gasto
                 if(values['-disable_productos-']):
-                    total_precios_productos = sum(map(lambda prod : float(prod["precio"].replace(",",".")),lista_productos))
-                                            
+                    total_precios_productos = float("{:.2f}".format(sum(map(lambda prod : float(prod["precio"].replace(",",".")),lista_productos))))
+                    
                     #Si los precios no coinciden mostrar un popup y cancelar todo el resto de las operaciones
                     if(total_precios_productos != float(values['-precio-'].replace(",","."))):
                         sg.popup("Error la suma de los montos de los productos no coinciden con el total del gasto")
@@ -161,6 +166,9 @@ def loop():
 
                         ##Resetea la lista de productos
                         lista_productos=[]
+
+                        window['-monto_total-'].update('0')
+                
                         window['-lista_productos-'].update(lista_productos)
 
 
@@ -193,7 +201,7 @@ def build(lista_usuarios, lista_tipos, lista_productos):
             [sg.Input(key='-precio-')],
 
             [sg.Text('Seleccione quien realizo la compra')],
-            [sg.Listbox(lista_usuarios, size= (20,len(lista_usuarios) if len(lista_usuarios) <= 10 else 10), key = '-autor-', enable_events = True)],
+            [sg.Listbox(lista_usuarios, size= (20,len(lista_usuarios) if len(lista_usuarios) <= 10 else 10), key = '-autor-',enable_events = True)],
             
 
             #Switch para activar o desactivar el análisis por productos.
@@ -207,10 +215,13 @@ def build(lista_usuarios, lista_tipos, lista_productos):
             
             [sg.Push(), sg.Text('Peso'), sg.Input(key='-peso-',size=(30,40))]],   
             [sg.Push(), sg.Text('Precio') , sg.Input(key='-precio_producto-',size=(30,40))],
-
+        
             ## Aceptar (agregar producto a la lista) 
-            [sg.Push(), sg.Button('Agregar producto',key='-agregar_producto-'),
+            [sg.Button('Agregar producto',key='-agregar_producto-'), sg.Text("Total: "), sg.Text('0',key='-monto_total-'),
              sg.Listbox(lista_productos,key='-lista_productos-',size=(20,5))],
+            
+            
+            
 
 
             ## Aceptar (agregar gasto y guardar) --- Boton para salir 
@@ -219,5 +230,3 @@ def build(lista_usuarios, lista_tipos, lista_productos):
             ]
 
     return sg.Window(title = "Agregar Gasto", layout = layout, margins = (100,100),resizable=True,auto_size_buttons=True,auto_size_text=True, element_justification='center', no_titlebar=True,disable_close=False, disable_minimize=False, alpha_channel=1, grab_anywhere=True)
-
-

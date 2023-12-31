@@ -53,7 +53,6 @@ def build(lista_usuarios):
     #Crea el layout de la ventana, es una lista de elementos de PysimpleGUI
     layout= [[sg.Text("ELIMINACION DE DATOS", size=(40,2), font=("Sawasdee", 15), justification= 'center')],
 
-                ##TENEMOS QUE MANDAR A ELIMINAR EL DATO QUE FUE SELECCIONADO DE ALGUNA DE LAS TRES TABLAS, AL MOMENTO DE DAR A ELIMINAR
                 #Tabla con todos los gastos 
                 #[sg.Table(values = data_gastos, justification="center", headings=['Monto ', 'Fecha ', 'Peso ', 'Autor', 'Tipo'], auto_size_columns=False, col_widths=[20, 20],row_height=18, pad=(2, 2))],
                             
