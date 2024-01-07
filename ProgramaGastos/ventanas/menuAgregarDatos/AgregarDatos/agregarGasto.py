@@ -49,6 +49,8 @@ def loop():
             if(not values['-disable_productos-']):
                 window['-peso-'].update('')
                 window['-lista_productos-'].update('')
+                window['-monto_total-'].update('')
+
 
 
             #Update elementos, habilitandolos o deshabilitandolos
@@ -58,6 +60,7 @@ def loop():
             window['-tipo-'].update(            disabled= not values['-disable_productos-'])
             window['-precio_producto-'].update( disabled= not values['-disable_productos-'])
             
+
             window['-agregar_producto-'].update(disabled= not values['-disable_productos-'])
             window['-lista_productos-'].update( disabled=not values['-disable_productos-'])
 
@@ -65,43 +68,55 @@ def loop():
         #Agregar producto a la lista de productos del gasto 
         elif event == "-agregar_producto-":
 
-            #Los productos no pueden agregarse vacios o con campos incompletos
-            if(values['-tipo-']) == '':
-                sg.popup("Olvido ingresar el tipo de producto")
-            elif(values['-precio_producto-']) == '':
-                sg.popup("Olvido ingresar el precio del producto")
-            else:
+            tipo = values['-tipo-']
+            precio_producto = values['-precio_producto-']
 
+            try:
+                #Los productos no pueden agregarse vacios o con campos incompletos
+                if(tipo) == '':
+                    sg.popup("Olvido ingresar el tipo de producto")
+                elif( precio_producto) == '':
+                    sg.popup("Olvido ingresar el precio del producto")
+                else:
 
-                window['-monto_total-'].update("{:.2f}".format(float(window['-monto_total-'].get()) + float(values['-precio_producto-'])))
+                    #Buscar el monto total del gasto
+                    monto_total = window['-monto_total-'].get()
+
+                    #Actualizarlo sumandole el precio del producto (monto_total += precio_producto)
+                    window['-monto_total-'].update(ConvertirEnFloatTruncado(monto_total) + ConvertirEnFloatTruncado(precio_producto))
+                    
+                    #Crea el objeto producto para agregarlo al listado en pantalla
+                    producto = {
+                        'precio' : precio_producto,
+                        'peso'  : values['-peso-'],
+                        'tipo'  : tipo
+                    }
+
+                    lista_productos.append(producto)
+
+                    #Resetear la lista de productos, el precio y el peso
+                    window['-precio_producto-'].update('')
+                    window['-peso-'].update('')
+                    window['-lista_productos-'].update(list(map(lambda prod: prod['tipo'], lista_productos)))
+
+            except ValueError:
+                sg.Popup("Hubo un error en los datos, asegúrese que el precio está bien escrito")
+
                 
-                #print(f"TEST:  {values['-monto_total-']}  ")
-                print(f"TEST:  {window['-monto_total-'].get()}  ")
-
-                producto = {
-                    'precio' : values['-precio_producto-'],
-                    'peso'  : values['-peso-'],
-                    'tipo'  : values['-tipo-']
-                }
-
-                lista_productos.append(producto)
-
-                #Resetear la lista de productos, el precio y el peso
-                window['-precio_producto-'].update('')
-                window['-peso-'].update('')
-                window['-lista_productos-'].update(list(map(lambda prod: prod['tipo'], lista_productos)))
-
         #Si el user clickea aceptar deben guardarse los datos del gasto en un archivo
         elif event == "aceptar":
 
             cancelar_operaciones = False
+
+
+            precio_del_gasto = values['-precio-']
 
             #Deberia hacer una funcion que haga las comprobaciones
 
             ##Si algun campo está vacio debe mostrar un popup al respecto y no dejar guardar el producto, y no hacer operaciones innecesarias
             if(values['-tipo_gasto-']) == '':
                 sg.popup("Olvido ingresar el tipo de gasto")
-            elif(values['-precio-']) == '':
+            elif(precio_del_gasto) == '':
                 sg.popup("Olvido ingresar el precio del gasto")
             elif(values['-autor-'].__len__() == 0):
                 sg.popup("Olvido ingresar el autor del gasto")
@@ -110,16 +125,18 @@ def loop():
                 #Si esta activado el analisis por productos debe verificar que los precios de los productos coincidan con el total del gasto, si no coinciden debe activar el booleano CANCELAR_OPERACIONES
                 #Si esta desactivado el analisis por productos entonces solo debe setear el monto del precio del gasto
                 if(values['-disable_productos-']):
-                    total_precios_productos = float("{:.2f}".format(sum(map(lambda prod : float(prod["precio"].replace(",",".")),lista_productos))))
-                    
+
+                    total_precios_productos = ConvertirEnFloatTruncado(sum(map(lambda prod : ConvertirEnFloatTruncado(prod["precio"]),lista_productos)))
+
                     #Si los precios no coinciden mostrar un popup y cancelar todo el resto de las operaciones
-                    if(total_precios_productos != float(values['-precio-'].replace(",","."))):
+                    if(total_precios_productos != ConvertirEnFloatTruncado(precio_del_gasto)):
                         sg.popup("Error la suma de los montos de los productos no coinciden con el total del gasto")
                         cancelar_operaciones = True
                     else:
                         monto_total = total_precios_productos
                 else:
-                    monto_total = float(values['-precio-'].replace(",","."))
+                    monto_total = ConvertirEnFloatTruncado(precio_del_gasto)
+
 
                 if(not(cancelar_operaciones)):
 
@@ -137,7 +154,7 @@ def loop():
                         fecha = datetime.now().strftime('%d-%m-%Y') if values['-date-'] == '' else values['-date-']
                         
                         
-                        #Crea un diccionario gasto para almacenar los datos del gasto, recibido en los elementos de la pantalla
+                        #Crea un diccionario gasto para almacenar los datos del gasto, recibidos en los elementos de la pantalla
                         gasto = {
 
                             'monto_total' : monto_total,
@@ -156,6 +173,7 @@ def loop():
                         #Agrega el gasto (dicc) a la lista de gastos (dicc)
                         lista_gastos.append(gasto)
                                         
+                            ## esto no anda?? 
                         #ACTUALIZAR EL MONTO DEL USUARIO QUE COMPRO
                         usuario['monto'] -= monto_total
 

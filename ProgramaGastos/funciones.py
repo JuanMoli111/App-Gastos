@@ -46,5 +46,19 @@ def forzar_path():
 
     return path
 
+def ConvertirEnFloatTruncado(num):
+    """
+        Recibe un numero y lo convierte en un float con dos decimales, ya sea que reciba un float, un integer, o un string
+        si recibe un string vacio devuelve 0.   Si recibe un String representando un numero decimal con ',' lo convierte en '.'
+    """
+
+    if (isinstance(num,str)):
+        if(num == ''):
+            return 0
+        else:
+                num = float(num.replace(",","."))
+
+    return float("{:.2f}".format(num))
+    
 #Definimos la variable path en el mismo modulo que las funciones que lo usan
 path = forzar_path()
