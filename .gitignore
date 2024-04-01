@@ -4,3 +4,5 @@ gastoscopy.json
 .vscode
 bin
 __pycache__
+test.py
+test2.py
