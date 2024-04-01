@@ -6,7 +6,7 @@ from ventanas.menuAgregarDatos.menuAgregarDatos import start as AgregarDatosStar
 
 from ventanas.eliminarDatos.eliminarDatos import start as EliminarDatosStart
 
-
+from funciones import convert_to_bytes
 sg.theme('Purple')
 
 def start():
@@ -71,18 +71,19 @@ def loop():
 
 def build():
 
+    sharky_path = r'C:\\Users\\EXO\AppData\\Local\\Programs\\Python\\Python38\\PROYECTOS\\ProyGastos\\ProgramaGastos\\ventanas\\Sharky.png'
+
     layout = [
         
         
-                [sg.Text("PROGRAMA DE GESTION DE GASTOS" , font=("Sawasdee", 15), justification= 'center', text_color='blue')],
+                [sg.Text("PROGRAMA DE GESTION DE GASTOS" , font=("Sawasdee", 15), justification= 'center', text_color='blue'),sg.Image(convert_to_bytes(sharky_path,(90,90)))],
 
                 [sg.Button('Agregar Datos',key = '-agregar-', size=(16,2), pad=(10,10)),
                 sg.Button('Visualizar los datos',key = '-visualizar-', size=(16,2), pad=(20,20)),
                 sg.Button('Eliminar datos',key = '-eliminar-', size=(16,2), pad=(10,10))],
-
-                
+        
                 [sg.Button('Salir', key = 'salir')]
                 
+                
             ]
-            
-    return sg.Window('Menu principal', layout, size=(500,400),resizable=True,auto_size_buttons=True,auto_size_text=True, element_padding=(50,60), element_justification='center', no_titlebar=True,disable_close=False, disable_minimize=False, alpha_channel=1, grab_anywhere=True)
+    return sg.Window('Menu principal', layout, size=(700,500),resizable=True,auto_size_buttons=True,auto_size_text=True, element_padding=(50,60), element_justification='center', no_titlebar=True,disable_close=False, disable_minimize=False, alpha_channel=1, grab_anywhere=True)

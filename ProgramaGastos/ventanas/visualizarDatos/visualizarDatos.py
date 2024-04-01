@@ -1,4 +1,4 @@
-from funciones import decode_json
+from funciones import decode_json, ConvertirEnFloatTruncado
 
 import matplotlib.pyplot as plt
 
@@ -8,6 +8,13 @@ import pandas as pd
 def create_bar_graph(gasto, tipo_gasto):
     plt.figure(figsize=(16, 8))
     plt.bar(tipo_gasto, gasto)
+    plt.title('Gastos por tipo de gasto')
+    plt.show()
+
+   
+def create_pie_graph(gasto, tipo_gasto):
+    plt.figure(figsize=(16, 8))
+    plt.pie(tipo_gasto, gasto)
     plt.title('Gastos por tipo de gasto')
     plt.show()
 
@@ -41,6 +48,7 @@ def loop():
 
         print(df)
 
+
         ##Cierre de la ventana
         if event in (sg.WINDOW_CLOSED, "Exit", "-exit-","salir"):
             break
@@ -62,11 +70,11 @@ def loop():
             
             #Calcular el monto gastado por tipo de gasto
             montos_totales_por_tipo = [
-                sum(gasto["monto_total"] for gasto in lista_gastos if (gasto["tipo_gasto"] == tipo)) for tipo in tipos_de_gasto
+                sum(gasto["monto_total"] for gasto in lista_gastos if (gasto["tipo_gasto"] == tipo) and gasto["monto_total"]) for tipo in tipos_de_gasto
             ]
             
-            #create_bar_graph(montos_totales_por_tipo, tipos_de_gasto)
-
+            create_bar_graph(montos_totales_por_tipo, tipos_de_gasto)
+            #create_pie_graph(tipos_de_gasto,montos_totales_por_tipo)
 
 
             #Convierte la lista de gastos, que es una lista de diccionarios-gasto, en una lista de listas-gasto, que es el formato necesario para la tabla
@@ -74,12 +82,23 @@ def loop():
  
             # Obtener una lista de tipos de gasto únicos
             tipos_de_prod = list(set(prod["tipo"] for gasto in lista_gastos for prod in gasto.get("lista_productos", [])))
-
+            
             #Calcular el monto gastado por tipo de producto
             montos_totales_por_tipo_prod = [sum(float(str(prod["precio"]).replace(',', '.')) for gasto in lista_gastos for prod in gasto.get("lista_productos", []) if prod.get("tipo") == tipo) for tipo in tipos_de_prod]
-
             
-            create_bar_graph(montos_totales_por_tipo_prod, tipos_de_prod)
+            print("TEST:    ",tipos_de_prod)
+
+
+
+            tipos_unicos = list(set(palabra for prod in tipos_de_prod for palabra in prod.split('_')))
+                        
+            print("TEST:    ",tipos_unicos)
+            #Calcular el monto gastado por tipo de producto
+            montos_totales_por_tipo_prod_unico = [sum(float(str(prod["precio"]).replace(',', '.')) for gasto in lista_gastos for prod in gasto.get("lista_productos", []) if prod.get("tipo") == tipo) for tipo in tipos_unicos]
+            
+   
+            
+            #create_bar_graph(montos_totales_por_tipo_prod, tipos_de_prod)
 
 
             #Actualiza la tabla de gastos
