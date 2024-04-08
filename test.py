@@ -77,3 +77,11 @@ window.close()
             [sg.Button('aceptar'),sg.Button('salir')]
             
             ]"""
+"""
+ elif event == '-test-':
+            lista_usuarios[0]['gastos'] = ordenarGastosPorFecha(lista_usuarios[0]['gastos'])
+            write_json(data)
+
+
+
+"""

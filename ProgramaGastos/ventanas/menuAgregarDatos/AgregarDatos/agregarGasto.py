@@ -22,7 +22,7 @@ def loop():
     data = decode_json()
 
     lista_usuarios = data['usuarios']
-    lista_tipos = data['tipos']
+    #lista_tipos = data['tipos']
     lista_locales = data['locales']
 
     lista_marcas = list(set(prod["marca"] for gasto in lista_usuarios[0]["gastos"] for prod in gasto.get("lista_productos", []) if prod.get("marca")))
@@ -88,39 +88,39 @@ def loop():
                 sg.popup("Olvido ingresar la marca del producto")  
             else:
                 
-                ###
-                ###if(tipo not in lista_tipos and "Y")
-                try:
-                    #Buscar el monto total del gasto
-                    monto_total = window['-monto_total-'].get()
+                if(tipo in lista_tipos or "Yes" == sg.popup_yes_no("Este producto no está en la lista de productos ¿Deseas agregarlo al listado?")):
+                    try:
 
-                    #Actualizarlo sumandole el precio del producto (monto_total += precio_producto)
-                    window['-monto_total-'].update(ConvertirEnFloatTruncado(monto_total) + ConvertirEnFloatTruncado(precio_producto))
-                            
-                    #Crea el objeto producto para agregarlo al listado en pantalla
-                    producto = {
-                        'precio' : precio_producto,
-                        'peso'  : peso,
-                        'tipo'  : tipo,
-                        'marca' : marca_producto
-                    }
+                        if(tipo not in lista_tipos): lista_tipos.append(tipo)
+                        #Buscar el monto total del gasto
+                        monto_total = window['-monto_total-'].get()
+                        #Actualizarlo sumandole el precio del producto (monto_total += precio_producto)
+                        window['-monto_total-'].update(ConvertirEnFloatTruncado(monto_total) + ConvertirEnFloatTruncado(precio_producto))
+                                
+                        #Crea el objeto producto para agregarlo al listado en pantalla
+                        producto = {
+                            'precio' : precio_producto,
+                            'peso'  : peso,
+                            'tipo'  : tipo,
+                            'marca' : marca_producto
+                        }
 
-                    lista_productos.append(producto)
+                        lista_productos.append(producto)
 
-                    #Resetear la lista de productos, el precio y el peso
-                    window['-precio_producto-'].update('')
-                    window['-peso-'].update('')
-                    window['-lista_productos-'].update(list(map(lambda prod: prod['tipo'], lista_productos)))
-                except ValueError:
-                    sg.Popup("Hubo un error en los datos, asegúrese que el precio está bien escrito")
+                        #Resetear la lista de productos, el precio y el peso
+                        window['-precio_producto-'].update('')
+                        window['-peso-'].update('')
+                        window['-lista_productos-'].update(list(map(lambda prod: prod['tipo'], lista_productos)))
+                    except ValueError:
+                        sg.Popup("Hubo un error en los datos, asegúrese que el precio está bien escrito")
 
 
         elif event == '-lista_locales-':
             fila_seleccionada = values['-lista_locales-'][0]
             local_seleccionado = lista_locales[fila_seleccionada]
-            print(fila_seleccionada)
-            print([values['-lista_locales-']])
-            print(local_seleccionado)
+            #print(fila_seleccionada)
+            #print([values['-lista_locales-']])
+            #print(local_seleccionado)
 
         #Si clickea un item de la lista de productos debe setearse el campo de input con ese producto.
         elif event == '-lista_tipos-':
@@ -140,7 +140,7 @@ def loop():
             typed_value = values['-tipo-'].strip()
 
             filtered_types = filter_lista(typed_value,lista_tipos,2)
-            print(window['-lista_tipos-'])
+            #print(window['-lista_tipos-'])
             window['-lista_tipos-'].update(values=filtered_types)
 
         #Si el usuario escribe en el input de marcas, debe funcionar un buscador que mostrará las mejores coincidencias
@@ -156,15 +156,11 @@ def loop():
 
             cancelar_operaciones = False
             
-
             precio_del_gasto = values['-precio-']
 
             #
             local = values['-lista_locales-']
 
-            print("Valor al clickear aceptar:" , values['-lista_locales-'])
-            #print(data_selected)
-            #Deberia hacer una funcion que haga las comprobaciones
 
             ##Si algun campo está vacio debe mostrar un popup al respecto y no dejar guardar el producto, y no hacer operaciones innecesarias
             if (values['-tipo_gasto-']) == '':
@@ -214,7 +210,7 @@ def loop():
                         
                         
                         codigo_local = str(int(local[0])+1)
-                        print("Codigo local: ", codigo_local)
+                        
 
                         #Crea un diccionario gasto para almacenar los datos del gasto, recibidos en los elementos de la pantalla
                         gasto = {
@@ -233,8 +229,8 @@ def loop():
                         
                         
                         #Agrega el gasto (dicc) a la lista de gastos (dicc)
-                        lista_gastos.append(gasto)
-                                        
+                        #lista_gastos.append(gasto)
+                        binary_search_insert(lista_gastos,gasto)              
                          
                         #ACTUALIZAR EL MONTO DEL USUARIO QUE COMPRO
                         usuario['monto'] -= monto_total
@@ -264,8 +260,7 @@ def loop():
                 if event in (sg.WINDOW_CLOSED, "Exit", "-exit-","salir"):
                     break
                 elif event == '-aceptar_agregar_local-':
-                    print('que')
-
+                    
                     ##Salva los datos del local crea un diccionario para el local
                     local = {
                         'nombre':     values['-nombre_local-'],
@@ -276,12 +271,12 @@ def loop():
 
                     lista_locales.append(local)
                     write_json(data)
+
                     window['-lista_locales-'].update(list(map(lambda local: [local['nombre'],local['codigo']], lista_locales)))
                     window_agregar_local.close()
                     window_agregar_local = None
                     break
-            
-        
+
 
     return window
 
@@ -313,9 +308,8 @@ def build(lista_usuarios, lista_tipos, lista_productos, lista_locales, lista_mar
     #lista_tipos = [gasto for gasto in lista_usuarios[0]['gastos']]
 
    
-    print(lista_tipos)
-    print(lista_marcas)
-    #print(lista_gastos)
+    #print(lista_tipos)
+    #print(lista_marcas)
 
     lista_usuarios = list(map(lambda u: u['nombre'], lista_usuarios))
     lista_locales_formateada = (list(map(lambda local: [local['nombre'], local['codigo']], lista_locales)))
@@ -366,9 +360,9 @@ def build(lista_usuarios, lista_tipos, lista_productos, lista_locales, lista_mar
             [sg.Button('Agregar producto', key='-agregar_producto-',pad=10),
             sg.Listbox(values=lista_productos, key='-lista_productos-', size=(20, 5),pad=10)],
 
-            [sg.Text("Total: "),sg.Text('0', key='-monto_total-',justification='left')]
+            [sg.Text("Total: "),sg.Text('0', key='-monto_total-',justification='left')],
 
-
+            
         ], element_justification='center')],
 
     [sg.Button('Aceptar',pad=10), sg.Button('Salir',pad=10)],

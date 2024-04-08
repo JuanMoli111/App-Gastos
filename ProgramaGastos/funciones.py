@@ -3,6 +3,7 @@ import os
 import PIL.Image
 import io
 import base64
+from datetime import datetime
 
 def write_json(data):
     """esta funcion reescribe el json con el parámetro data"""
@@ -62,6 +63,22 @@ def ConvertirEnFloatTruncado(num):
 
     return float("{:.2f}".format(num))
     
+def ordenarGastosPorFecha(lista_gastos):
+    
+   return sorted(lista_gastos, key=lambda date: datetime.strptime(date['fecha'], '%d-%m-%Y'))
+
+def binary_search_insert(gastos, nuevo_gasto):
+    fecha_nuevo_gasto = datetime.strptime(nuevo_gasto['fecha'], '%d-%m-%Y')
+    low = 0
+    high = len(gastos)
+    while low < high:
+        mid = (low + high) // 2
+        mid_fecha = datetime.strptime(gastos[mid]['fecha'], '%d-%m-%Y')
+        if mid_fecha < fecha_nuevo_gasto:
+            low = mid + 1
+        else:
+            high = mid
+    gastos.insert(low, nuevo_gasto)
 
 def convert_to_bytes(file_or_bytes, resize=None):
     '''
@@ -120,5 +137,8 @@ def filter_lista(input_string,lista,min_substring_length_filter):
     matches.sort(key=lambda x: (x[1], x[0]), reverse=True)
 
     return [match[0] for match in matches]
+
+
+
 #Definimos la variable path en el mismo modulo que las funciones que lo usan
 path = forzar_path()
